@@ -1,15 +1,63 @@
-﻿namespace XIVComboPlugin.JobActions
+﻿using System;
+using Dalamud.Game.ClientState;
+using Dalamud.Game.ClientState.JobGauge;
+using Dalamud.Game.ClientState.JobGauge.Enums;
+using Dalamud.Game.ClientState.JobGauge.Types;
+
+namespace XIVComboPlugin.Combos
 {
     public static class AST
     {
         public const uint
+            Benefic = 3594,
+            Benefic2 = 3610,
             Play = 17055,
             Draw = 3590,
-            Balance = 4401,
-            Bole = 4404,
-            Arrow = 4402,
-            Spear = 4403,
-            Ewer = 4405,
-            Spire = 4406;
+            MinorArcana = 7443,
+            CrownPlay = 25869;
+
+        public static class Levels
+        {
+            public const byte
+                Benefic2 = 26;
+        }
+
+        public class Combo : CustomCombo
+        {
+            public Combo(ClientState clientState, JobGauges jobGauges) : base(clientState, jobGauges)
+            {
+                this.ClassID = 0;
+                this.JobID = 33;
+            }
+
+            public override ulong? Invoke(uint actionID, uint lastMove, float comboTime, Func<uint, ulong> originalHook)
+            {
+                var level = this.clientState.LocalPlayer.Level;
+
+                if (actionID == AST.Play)
+                {
+                    var gauge = GetJobGauge<ASTGauge>();
+                    if (gauge.DrawnCard == CardType.NONE)
+                        return originalHook(AST.Draw);
+                }
+
+                if (actionID == AST.CrownPlay)
+                {
+                    var gauge = GetJobGauge<ASTGauge>();
+                    if (gauge.DrawnCrownCard == CardType.NONE)
+                        return originalHook(AST.MinorArcana);
+                }
+
+                if (actionID == AST.Benefic || actionID == AST.Benefic2)
+                {
+                    if (level >= Levels.Benefic2)
+                        return AST.Benefic2;
+
+                    return AST.Benefic;
+                }
+
+                return null;
+            }
+        }
     }
 }

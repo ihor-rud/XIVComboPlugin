@@ -5,46 +5,44 @@ using Dalamud.Game.ClientState.JobGauge.Types;
 
 namespace XIVComboPlugin.Combos
 {
-    public static class SCH
+    public static class SGE
     {
         public const uint
-            Physick = 190,
-            Adloquium = 185,
-            FeyBless = 16543,
-            Consolation = 16546,
-            EnergyDrain = 167,
-            Aetherflow = 166;
+            Diagnosis = 24284,
+            Druochole = 24296,
+            Dyskrasia = 24297,
+            Toxikon = 24304;
 
         public static class Levels
         {
             public const byte
-                Adloquium = 30;
+                Druochole = 45,
+                Toxikon = 66;
         }
 
         public class Combo : CustomCombo
         {
             public Combo(ClientState clientState, JobGauges jobGauges) : base(clientState, jobGauges)
             {
-                this.ClassID = 15;
-                this.JobID = 28;
+                this.ClassID = 0;
+                this.JobID = 40;
             }
 
             public override ulong? Invoke(uint actionID, uint lastMove, float comboTime, Func<uint, ulong> originalHook)
             {
                 var level = this.clientState.LocalPlayer.Level;
 
-                if (actionID == SCH.FeyBless)
+                if (actionID == SGE.Diagnosis)
                 {
-                    if (GetJobGauge<SCHGauge>().SeraphTimer > 0)
-                        return SCH.Consolation;
+                    var gauge = GetJobGauge<SGEGauge>();
+                    if (gauge.Addersgall > 0 && !gauge.Eukrasia)
+                        return SGE.Druochole;
                 }
 
-                if (actionID == SCH.Physick || actionID == SCH.Adloquium)
+                if (actionID == SGE.Dyskrasia)
                 {
-                    if (level >= Levels.Adloquium)
-                        return SCH.Adloquium;
-
-                    return SCH.Physick;
+                    if (level >= Levels.Toxikon && GetJobGauge<SGEGauge>().Addersting > 0)
+                        return SGE.Toxikon;
                 }
 
                 return null;
