@@ -23,7 +23,8 @@ namespace XIVComboPlugin.Combos
         {
             public const short
                 Requiescat = 1368,
-                SwordOath = 1902;
+                SwordOath = 1902,
+                BladeOfFaithReady = 3019;
         }
 
         public static class Levels
@@ -32,7 +33,6 @@ namespace XIVComboPlugin.Combos
                 RiotBlade = 4,
                 RageOfHalone = 26,
                 Prominence = 40,
-                RoyalAuthority = 60,
                 Confiteor = 80;
         }
 

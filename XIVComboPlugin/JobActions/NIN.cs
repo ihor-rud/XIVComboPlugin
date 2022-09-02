@@ -17,14 +17,16 @@ namespace XIVComboPlugin.Combos
             TenChiJin = 7403,
             Meisui = 16489,
             Bunshin = 16493,
-            PhantomKamaitachi = 25774;
+            PhantomKamaitachi = 25774,
+            FleetingRaiju = 25778;
 
         public static class Buffs
         {
             public const short
                 Mudra = 496,
                 Suiton = 507,
-                Bunshin = 1954;
+                Bunshin = 1954,
+                RaijuReady = 2690;
         }
 
         public static class Levels
@@ -35,7 +37,8 @@ namespace XIVComboPlugin.Combos
                 HakkeMujinsatsu = 52,
                 ArmorCrush = 54,
                 Meisui = 72,
-                PhantomKamaitachi = 82;
+                PhantomKamaitachi = 82,
+                Raiju = 90;
         }
 
         public class Combo : CustomCombo
@@ -54,6 +57,11 @@ namespace XIVComboPlugin.Combos
                 {
                     if (HasEffect(NIN.Buffs.Mudra))
                         return originalHook(NIN.Ninjutsu);
+
+                    if (level >= NIN.Levels.Raiju && HasEffect(NIN.Buffs.RaijuReady))
+                    {
+                        return NIN.FleetingRaiju;
+                    }
 
                     if (comboTime > 0)
                     {

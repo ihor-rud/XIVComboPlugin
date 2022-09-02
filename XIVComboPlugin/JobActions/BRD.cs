@@ -8,8 +8,6 @@ namespace XIVComboPlugin.Combos
     public static class BRD
     {
         public const uint
-            WanderersMinuet = 3559,
-            PitchPerfect = 7404,
             QuickNock = 106,
             HeavyShot = 97,
             BurstShot = 16495,
@@ -19,7 +17,6 @@ namespace XIVComboPlugin.Combos
         public static class Buffs
         {
             public const short
-                WanderersMinuet = 2216,
                 StraightShotReady = 122;
         }
 
@@ -33,12 +30,6 @@ namespace XIVComboPlugin.Combos
 
             public override ulong? Invoke(uint actionID, uint lastMove, float comboTime, Func<uint, ulong> originalHook)
             {
-                if (actionID == BRD.WanderersMinuet)
-                {
-                    if (HasEffect(Buffs.WanderersMinuet))
-                        return BRD.PitchPerfect;
-                }
-
                 if (actionID == BRD.HeavyShot || actionID == BRD.BurstShot)
                 {
                     if (HasEffect(Buffs.StraightShotReady))

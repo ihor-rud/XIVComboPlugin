@@ -35,14 +35,14 @@ namespace XIVComboPlugin.Combos
                 if (actionID == SGE.Diagnosis)
                 {
                     var gauge = GetJobGauge<SGEGauge>();
-                    if (gauge.Addersgall > 0 && !gauge.Eukrasia)
+                    if (level > Levels.Druochole && gauge.Addersgall > 0 && !gauge.Eukrasia)
                         return SGE.Druochole;
                 }
 
                 if (actionID == SGE.Dyskrasia)
                 {
                     if (level >= Levels.Toxikon && GetJobGauge<SGEGauge>().Addersting > 0)
-                        return SGE.Toxikon;
+                        return originalHook(SGE.Toxikon);
                 }
 
                 return null;

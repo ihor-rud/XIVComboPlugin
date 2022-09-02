@@ -1,6 +1,7 @@
 ﻿using System;
 using Dalamud.Game.ClientState;
 using Dalamud.Game.ClientState.JobGauge;
+using Dalamud.Game.ClientState.JobGauge.Types;
 
 namespace XIVComboPlugin.Combos
 {
@@ -21,16 +22,13 @@ namespace XIVComboPlugin.Combos
             DraconianFury = 25770,
             SonicThrust = 7397,
             CoerthanTorment = 16477,
-            Jump = 92,
-            HighJump = 16478,
-            MirageDive = 7399;
+            WyrmwindThrust = 25773;
 
         public static class Buffs
         {
             public const short
                 SharperFangAndClaw = 802,
-                EnhancedWheelingThrust = 803,
-                DiveReady = 1243;
+                EnhancedWheelingThrust = 803;
         }
 
         public static class Levels
@@ -55,14 +53,13 @@ namespace XIVComboPlugin.Combos
             public override ulong? Invoke(uint actionID, uint lastMove, float comboTime, Func<uint, ulong> originalHook)
             {
                 var level = this.clientState.LocalPlayer.Level;
-                if (actionID == DRG.Jump || actionID == DRG.HighJump)
-                {
-                    if (HasEffect(Buffs.DiveReady))
-                        return DRG.MirageDive;
-                }
 
                 if (actionID == DRG.CoerthanTorment)
                 {
+                    var gauge = GetJobGauge<DRGGauge>();
+                    if (gauge.FirstmindsFocusCount == 2)
+                        return DRG.WyrmwindThrust;
+                    
                     if (comboTime > 0)
                     {
                         if ((lastMove == DRG.DoomSpike || lastMove == DRG.DraconianFury) && level >= Levels.SonicThrust)
@@ -76,6 +73,10 @@ namespace XIVComboPlugin.Combos
 
                 if (actionID == DRG.ChaosThrust || actionID == DRG.ChaoticSpring)
                 {
+                    var gauge = GetJobGauge<DRGGauge>();
+                    if (gauge.FirstmindsFocusCount == 2)
+                        return DRG.WyrmwindThrust;
+
                     if (comboTime > 0)
                     {
                         if ((lastMove == DRG.TrueThrust || lastMove == DRG.RaidenThrust) && level >= Levels.Disembowel)
@@ -95,6 +96,10 @@ namespace XIVComboPlugin.Combos
 
                 if (actionID == DRG.FullThrust || actionID == DRG.HeavensThrust)
                 {
+                    var gauge = GetJobGauge<DRGGauge>();
+                    if (gauge.FirstmindsFocusCount == 2)
+                        return DRG.WyrmwindThrust;
+                    
                     if (comboTime > 0)
                     {
                         if ((lastMove == DRG.TrueThrust || lastMove == DRG.RaidenThrust) && level >= Levels.VorpalThrust)

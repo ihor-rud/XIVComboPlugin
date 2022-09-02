@@ -18,7 +18,7 @@ namespace XIVComboPlugin.Combos
             public const byte
                 SyphonStrike = 2,
                 Souleater = 26,
-                StalwartSoul = 72;
+                StalwartSoul = 40;
         }
 
         public class Combo : CustomCombo

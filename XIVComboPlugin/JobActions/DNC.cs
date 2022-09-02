@@ -27,8 +27,8 @@ namespace XIVComboPlugin.Combos
         public static class Buffs
         {
             public const short
-                FlourishingSymmetry = 2693,
-                FlourishingFlow = 2694,
+                FlourishingSymmetry = 3017,
+                FlourishingFlow = 3018,
                 FlourishingFanDance = 1820,
                 FlourishingStarfall = 2700,
                 FourfoldFanDance = 2699;

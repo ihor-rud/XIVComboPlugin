@@ -32,7 +32,7 @@ namespace XIVComboPlugin
             Address = new IconReplacerAddressResolver();
             Address.Setup(scanner);
 
-            comboTimer = scanner.GetStaticAddressFromSig("48 89 2D ?? ?? ?? ?? 85 C0 74 0F");
+            comboTimer = scanner.GetStaticAddressFromSig("F3 0F 11 05 ?? ?? ?? ?? F3 0F 10 45 ?? E8");
             lastComboMove = comboTimer + 0x4;
             iconHook = new Hook<OnGetIconDelegate>(Address.GetIcon, GetIconDetour);
             checkerHook = new Hook<OnCheckIsIconReplaceableDelegate>(Address.IsIconReplaceable, (_) => 1);
