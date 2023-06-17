@@ -5,6 +5,7 @@ using Dalamud.Game;
 using Dalamud.Game.ClientState;
 using Dalamud.Game.ClientState.JobGauge;
 using Dalamud.Hooking;
+using FFXIVClientStructs.FFXIV.Client.Game;
 using XIVComboPlugin.Combos;
 
 namespace XIVComboPlugin
@@ -25,98 +26,56 @@ namespace XIVComboPlugin
         private readonly Hook<OnGetIconDelegate> iconHook;
         private readonly IntPtr lastComboMove;
 
-        public IconReplacer(SigScanner scanner, ClientState clientState, JobGauges jobGauges)
+        public unsafe IconReplacer(SigScanner scanner, ClientState clientState, JobGauges jobGauges)
         {
             this.clientState = clientState;
 
             Address = new IconReplacerAddressResolver();
             Address.Setup(scanner);
 
-            comboTimer = scanner.GetStaticAddressFromSig("F3 0F 11 05 ?? ?? ?? ?? F3 0F 10 45 ?? E8");
+            var actionmanager = (byte*)ActionManager.Instance();
+            comboTimer = (IntPtr)(actionmanager + 0x60);
             lastComboMove = comboTimer + 0x4;
-            iconHook = new Hook<OnGetIconDelegate>(Address.GetIcon, GetIconDetour);
-            checkerHook = new Hook<OnCheckIsIconReplaceableDelegate>(Address.IsIconReplaceable, (_) => 1);
 
-            // tank
-            CustomCombo combo = new PLD.Combo(clientState, jobGauges);
-            combos[combo.ClassID] = combo;
-            combos[combo.JobID] = combo;
+            iconHook = Hook<OnGetIconDelegate>.FromAddress(Address.GetIcon, GetIconDetour);
+            checkerHook = Hook<OnCheckIsIconReplaceableDelegate>.FromAddress(Address.IsIconReplaceable, (_) => 1);
 
-            combo = new WAR.Combo(clientState, jobGauges);
-            combos[combo.ClassID] = combo;
-            combos[combo.JobID] = combo;
+            CustomCombo[] comboList = {
+                // Tanks
+                new PLD.Combo(clientState, jobGauges),
+                new WAR.Combo(clientState, jobGauges),
+                new DRK.Combo(clientState, jobGauges),
+                new GNB.Combo(clientState, jobGauges),
 
-            combo = new DRK.Combo(clientState, jobGauges);
-            combos[combo.ClassID] = combo;
-            combos[combo.JobID] = combo;
+                // Melee DPS
+                new MNK.Combo(clientState, jobGauges),
+                new DRG.Combo(clientState, jobGauges),
+                new NIN.Combo(clientState, jobGauges),
+                new SAM.Combo(clientState, jobGauges),
+                new RPR.Combo(clientState, jobGauges),
 
-            combo = new GNB.Combo(clientState, jobGauges);
-            combos[combo.ClassID] = combo;
-            combos[combo.JobID] = combo;
+                // Physical Ranged DPS
+                new BRD.Combo(clientState, jobGauges),
+                new MCH.Combo(clientState, jobGauges),
+                new DNC.Combo(clientState, jobGauges),
 
-            // male dps
-            combo = new MNK.Combo(clientState, jobGauges);
-            combos[combo.ClassID] = combo;
-            combos[combo.JobID] = combo;
+                // Magical Ranged DPS
+                new BLM.Combo(clientState, jobGauges),
+                new SMN.Combo(clientState, jobGauges),
+                new RDM.Combo(clientState, jobGauges),
 
-            combo = new DRG.Combo(clientState, jobGauges);
-            combos[combo.ClassID] = combo;
-            combos[combo.JobID] = combo;
+                // Healers
+                new WHM.Combo(clientState, jobGauges),
+                new SCH.Combo(clientState, jobGauges),
+                new AST.Combo(clientState, jobGauges),
+                new SGE.Combo(clientState, jobGauges),
+            };
 
-            combo = new NIN.Combo(clientState, jobGauges);
-            combos[combo.ClassID] = combo;
-            combos[combo.JobID] = combo;
-
-            combo = new SAM.Combo(clientState, jobGauges);
-            combos[combo.ClassID] = combo;
-            combos[combo.JobID] = combo;
-
-            combo = new RPR.Combo(clientState, jobGauges);
-            combos[combo.ClassID] = combo;
-            combos[combo.JobID] = combo;
-
-            // range p dps
-            combo = new BRD.Combo(clientState, jobGauges);
-            combos[combo.ClassID] = combo;
-            combos[combo.JobID] = combo;
-
-            combo = new MCH.Combo(clientState, jobGauges);
-            combos[combo.ClassID] = combo;
-            combos[combo.JobID] = combo;
-
-            combo = new DNC.Combo(clientState, jobGauges);
-            combos[combo.ClassID] = combo;
-            combos[combo.JobID] = combo;
-
-            // range m dps
-            combo = new BLM.Combo(clientState, jobGauges);
-            combos[combo.ClassID] = combo;
-            combos[combo.JobID] = combo;
-
-            combo = new SMN.Combo(clientState, jobGauges);
-            combos[combo.ClassID] = combo;
-            combos[combo.JobID] = combo;
-
-            combo = new RDM.Combo(clientState, jobGauges);
-            combos[combo.ClassID] = combo;
-            combos[combo.JobID] = combo;
-
-            // healer
-            combo = new WHM.Combo(clientState, jobGauges);
-            combos[combo.ClassID] = combo;
-            combos[combo.JobID] = combo;
-
-            combo = new SCH.Combo(clientState, jobGauges);
-            combos[combo.ClassID] = combo;
-            combos[combo.JobID] = combo;
-
-            combo = new AST.Combo(clientState, jobGauges);
-            combos[combo.ClassID] = combo;
-            combos[combo.JobID] = combo;
-
-            combo = new SGE.Combo(clientState, jobGauges);
-            combos[combo.ClassID] = combo;
-            combos[combo.JobID] = combo;
+            foreach (var item in comboList)
+            {
+                combos[item.ClassID] = item;
+                combos[item.JobID] = item;
+            }
         }
 
         public void Enable()
@@ -133,23 +92,18 @@ namespace XIVComboPlugin
 
         private ulong GetIconDetour(byte self, uint actionID)
         {
-            if (clientState.LocalPlayer == null) return iconHook.Original(self, actionID);
+            if (clientState.LocalPlayer == null)
+            {
+                return iconHook.Original(self, actionID);
+            }
 
             var lastMove = Marshal.ReadInt32(lastComboMove);
             var comboTime = Marshal.PtrToStructure<float>(comboTimer);
             var jobId = this.clientState.LocalPlayer.ClassJob.Id;
 
-            var combo = combos.GetValueOrDefault(jobId);
-            if (combo != null)
-            {
-                var action = combo.Invoke(actionID, (uint)lastMove, comboTime, (actionID) => iconHook.Original(self, actionID));
-                if (action.HasValue)
-                {
-                    return action.Value;
-                }
-            }
-
-            return iconHook.Original(self, actionID);
+            var combo = combos[jobId];
+            var action = combo.Invoke(actionID, (uint)lastMove, comboTime, (actionID) => iconHook.Original(self, actionID));
+            return action ?? iconHook.Original(self, actionID);
         }
     }
 }
