@@ -5,16 +5,16 @@ using Dalamud.Game.ClientState.JobGauge.Types;
 
 namespace XIVComboPlugin.Combos
 {
-    public static class BRD
+    static class BRD
     {
-        public const uint
-            QuickNock = 106,
-            HeavyShot = 97,
-            BurstShot = 16495,
-            StraightShot = 98,
-            ApexArrow = 16496;
+        const uint
+           QuickNock = 106,
+           HeavyShot = 97,
+           BurstShot = 16495,
+           StraightShot = 98,
+           ApexArrow = 16496;
 
-        public static class Buffs
+        static class Buffs
         {
             public const short
                 StraightShotReady = 122;

@@ -4,16 +4,16 @@ using Dalamud.Game.ClientState.JobGauge;
 
 namespace XIVComboPlugin.Combos
 {
-    public static class DRK
+    static class DRK
     {
-        public const uint
-            HardSlash = 3617,
-            SyphonStrike = 3623,
-            Souleater = 3632,
-            Unleash = 3621,
-            StalwartSoul = 16468;
+        const uint
+           HardSlash = 3617,
+           SyphonStrike = 3623,
+           Souleater = 3632,
+           Unleash = 3621,
+           StalwartSoul = 16468;
 
-        public static class Levels
+        static class Levels
         {
             public const byte
                 SyphonStrike = 2,

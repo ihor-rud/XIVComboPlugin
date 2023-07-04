@@ -5,33 +5,33 @@ using Dalamud.Game.ClientState.JobGauge.Types;
 
 namespace XIVComboPlugin.Combos
 {
-    public static class DRG
+    static class DRG
     {
-        public const uint
-            TrueThrust = 75,
-            VorpalThrust = 78,
-            Disembowel = 87,
-            FullThrust = 84,
-            HeavensThrust = 25771,
-            ChaosThrust = 88,
-            ChaoticSpring = 25772,
-            FangAndClaw = 3554,
-            WheelingThrust = 3556,
-            RaidenThrust = 16479,
-            DoomSpike = 86,
-            DraconianFury = 25770,
-            SonicThrust = 7397,
-            CoerthanTorment = 16477,
-            WyrmwindThrust = 25773;
+        const uint
+           TrueThrust = 75,
+           VorpalThrust = 78,
+           Disembowel = 87,
+           FullThrust = 84,
+           HeavensThrust = 25771,
+           ChaosThrust = 88,
+           ChaoticSpring = 25772,
+           FangAndClaw = 3554,
+           WheelingThrust = 3556,
+           RaidenThrust = 16479,
+           DoomSpike = 86,
+           DraconianFury = 25770,
+           SonicThrust = 7397,
+           CoerthanTorment = 16477,
+           WyrmwindThrust = 25773;
 
-        public static class Buffs
+        static class Buffs
         {
             public const short
                 SharperFangAndClaw = 802,
                 EnhancedWheelingThrust = 803;
         }
 
-        public static class Levels
+        static class Levels
         {
             public const byte
                 VorpalThrust = 4,
@@ -59,7 +59,7 @@ namespace XIVComboPlugin.Combos
                     var gauge = GetJobGauge<DRGGauge>();
                     if (gauge.FirstmindsFocusCount == 2)
                         return DRG.WyrmwindThrust;
-                    
+
                     if (comboTime > 0)
                     {
                         if ((lastMove == DRG.DoomSpike || lastMove == DRG.DraconianFury) && level >= Levels.SonicThrust)
@@ -99,7 +99,7 @@ namespace XIVComboPlugin.Combos
                     var gauge = GetJobGauge<DRGGauge>();
                     if (gauge.FirstmindsFocusCount == 2)
                         return DRG.WyrmwindThrust;
-                    
+
                     if (comboTime > 0)
                     {
                         if ((lastMove == DRG.TrueThrust || lastMove == DRG.RaidenThrust) && level >= Levels.VorpalThrust)

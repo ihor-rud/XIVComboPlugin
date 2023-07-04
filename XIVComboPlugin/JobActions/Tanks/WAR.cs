@@ -4,23 +4,22 @@ using Dalamud.Game.ClientState.JobGauge;
 
 namespace XIVComboPlugin.Combos
 {
-    public static class WAR
+    static class WAR
     {
-        public const uint
-            StormsPath = 42,
-            HeavySwing = 31,
-            Maim = 37,
-            StormsEye = 45,
-            MythrilTempest = 16462,
-            Overpower = 41,
-            InnerBeast = 49,
-            SteelCyclone = 51,
-            FellCleave = 3549,
-            Decimate = 3550,
-            PrimalRend = 25753;
+        const uint
+           StormsPath = 42,
+           HeavySwing = 31,
+           Maim = 37,
+           StormsEye = 45,
+           MythrilTempest = 16462,
+           Overpower = 41,
+           InnerBeast = 49,
+           SteelCyclone = 51,
+           FellCleave = 3549,
+           Decimate = 3550,
+           PrimalRend = 25753;
 
-
-        public static class Levels
+        static class Levels
         {
             public const byte
                 Maim = 4,
@@ -29,7 +28,7 @@ namespace XIVComboPlugin.Combos
                 StormsEye = 50;
         }
 
-        public static class Buffs
+        static class Buffs
         {
             public const short
                 PrimalRendReady = 2624;

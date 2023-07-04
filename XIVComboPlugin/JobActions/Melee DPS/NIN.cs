@@ -4,23 +4,23 @@ using Dalamud.Game.ClientState.JobGauge;
 
 namespace XIVComboPlugin.Combos
 {
-    public static class NIN
+    static class NIN
     {
-        public const uint
-            Ninjutsu = 2260,
-            SpinningEdge = 2240,
-            GustSlash = 2242,
-            AeolianEdge = 2255,
-            ArmorCrush = 3563,
-            DeathBlossom = 2254,
-            HakkeMujinsatsu = 16488,
-            TenChiJin = 7403,
-            Meisui = 16489,
-            Bunshin = 16493,
-            PhantomKamaitachi = 25774,
-            FleetingRaiju = 25778;
+        const uint
+           Ninjutsu = 2260,
+           SpinningEdge = 2240,
+           GustSlash = 2242,
+           AeolianEdge = 2255,
+           ArmorCrush = 3563,
+           DeathBlossom = 2254,
+           HakkeMujinsatsu = 16488,
+           TenChiJin = 7403,
+           Meisui = 16489,
+           Bunshin = 16493,
+           PhantomKamaitachi = 25774,
+           FleetingRaiju = 25778;
 
-        public static class Buffs
+        static class Buffs
         {
             public const short
                 Mudra = 496,
@@ -29,7 +29,7 @@ namespace XIVComboPlugin.Combos
                 RaijuReady = 2690;
         }
 
-        public static class Levels
+        static class Levels
         {
             public const byte
                 GustSlash = 4,

@@ -5,38 +5,34 @@ using Dalamud.Game.ClientState.JobGauge.Types;
 
 namespace XIVComboPlugin.Combos
 {
-    public static class BLM
+    static class BLM
     {
-        public const uint
-            Scathe = 156,
-            Fire = 141,
-            Fire3 = 152,
-            Fire4 = 3577,
-            Blizzard = 142,
-            Blizzard3 = 154,
-            Blizzard4 = 3576,
-            Freeze = 159,
-            Flare = 162,
-            Transpose = 149,
-            UmbralSoul = 16506,
-            LeyLines = 3573,
-            BetweenTheLines = 7419,
-            Xenoglossy = 16507;
+        const uint
+           Scathe = 156,
+           Fire = 141,
+           Fire3 = 152,
+           Fire4 = 3577,
+           Blizzard2 = 25793,
+           Blizzard4 = 3576,
+           Freeze = 159,
+           Transpose = 149,
+           UmbralSoul = 16506,
+           LeyLines = 3573,
+           BetweenTheLines = 7419,
+           Xenoglossy = 16507;
 
-        public static class Buffs
+        static class Buffs
         {
             public const short
                 LeyLines = 737,
                 Firestarter = 165;
         }
 
-        public static class Levels
+        static class Levels
         {
             public const byte
                 Fire3 = 35,
-                Blizzard3 = 35,
-                Blizzard4 = 58,
-                Fire4 = 60,
+                Freeze = 40,
                 BetweenTheLines = 62,
                 UmbralSoul = 76,
                 Xenoglossy = 80;
@@ -70,22 +66,22 @@ namespace XIVComboPlugin.Combos
                     return BLM.Fire4;
                 }
 
-                if (actionID == BLM.Freeze || actionID == BLM.Flare)
+                if (actionID == BLM.Freeze || actionID == BLM.Blizzard2)
                 {
                     var gauge = GetJobGauge<BLMGauge>();
-                    if (gauge.InUmbralIce)
+                    if (gauge.InUmbralIce && level >= Levels.Freeze)
                         return BLM.Freeze;
-                    return BLM.Flare;
+                    return originalHook(BLM.Blizzard2);
                 }
 
-                if (actionID == BLM.Transpose)
+                if (actionID == BLM.Transpose || actionID == BLM.UmbralSoul)
                 {
                     var gauge = GetJobGauge<BLMGauge>();
                     if (gauge.InUmbralIce && level >= Levels.UmbralSoul)
                         return BLM.UmbralSoul;
                 }
 
-                if (actionID == BLM.LeyLines)
+                if (actionID == BLM.LeyLines || actionID == BLM.BetweenTheLines)
                 {
                     if (level >= Levels.BetweenTheLines && HasEffect(Buffs.LeyLines))
                         return BLM.BetweenTheLines;
@@ -94,7 +90,7 @@ namespace XIVComboPlugin.Combos
                 if (actionID == BLM.Scathe)
                 {
                     var gauge = GetJobGauge<BLMGauge>();
-                    if (level >= Levels.Xenoglossy && gauge.PolyglotStacks > 0)
+                    if (gauge.PolyglotStacks > 0 && level >= Levels.Xenoglossy)
                         return BLM.Xenoglossy;
                 }
 

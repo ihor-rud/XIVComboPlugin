@@ -5,37 +5,35 @@ using Dalamud.Game.ClientState.JobGauge.Types;
 
 namespace XIVComboPlugin.Combos
 {
-    public static class SAM
+    static class SAM
     {
-        public const uint
-            Hakaze = 7477,
-            Jinpu = 7478,
-            Gekko = 7481,
-            Shifu = 7479,
-            Kasha = 7482,
-            Yukikaze = 7480,
-            Fuga = 7483,
-            Fuko = 25780,
-            Mangetsu = 7484,
-            Oka = 7485,
-            Iaijutsu = 7867,
-            TsubameGaeshi = 16483,
-            Shoha = 16487,
-            Kyuten = 7491,
-            Shoha2 = 25779,
-            Ikishoten = 16482,
-            OgiNamikiri = 25781,
-            KaeshiNamikiri = 25782;
+        const uint
+           Hakaze = 7477,
+           Jinpu = 7478,
+           Gekko = 7481,
+           Shifu = 7479,
+           Kasha = 7482,
+           Yukikaze = 7480,
+           Fuga = 7483,
+           Fuko = 25780,
+           Mangetsu = 7484,
+           Oka = 7485,
+           Iaijutsu = 7867,
+           TsubameGaeshi = 16483,
+           Shoha = 16487,
+           Kyuten = 7491,
+           Shoha2 = 25779,
+           Ikishoten = 16482,
+           OgiNamikiri = 25781;
 
-
-        public static class Buffs
+        static class Buffs
         {
             public const short
                 MeikyoShisui = 1233,
                 OgiNamikiriReady = 2959;
         }
 
-        public static class Levels
+        static class Levels
         {
             public const byte
                 Jinpu = 4,

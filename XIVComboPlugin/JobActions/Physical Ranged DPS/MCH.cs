@@ -5,19 +5,19 @@ using Dalamud.Game.ClientState.JobGauge.Types;
 
 namespace XIVComboPlugin.Combos
 {
-    public static class MCH
+    static class MCH
     {
-        public const uint
-            CleanShot = 2873,
-            HeatedCleanShot = 7413,
-            SplitShot = 2866,
-            SlugShot = 2868,
-            HeatBlast = 7410,
-            SpreadShot = 2870,
-            Scattergun = 25786,
-            AutoCrossbow = 16497;
+        const uint
+           CleanShot = 2873,
+           HeatedCleanShot = 7413,
+           SplitShot = 2866,
+           SlugShot = 2868,
+           HeatBlast = 7410,
+           SpreadShot = 2870,
+           Scattergun = 25786,
+           AutoCrossbow = 16497;
 
-        public static class Levels
+        static class Levels
         {
             public const byte
                 SlugShot = 2,

@@ -5,26 +5,26 @@ using Dalamud.Game.ClientState.JobGauge.Types;
 
 namespace XIVComboPlugin.Combos
 {
-    public static class DNC
+    static class DNC
     {
-        public const uint
-            Bladeshower = 15994,
-            Bloodshower = 15996,
-            Windmill = 15993,
-            RisingWindmill = 15995,
-            Cascade = 15989,
-            Fountain = 15990,
-            ReverseCascade = 15991,
-            Fountainfall = 15992,
-            FanDance1 = 16007,
-            FanDance2 = 16008,
-            FanDance3 = 16009,
-            FanDance4 = 25791,
-            Flourish = 16013,
-            Devilment = 16011,
-            StarfallDance = 25792;
+        const uint
+           Bladeshower = 15994,
+           Bloodshower = 15996,
+           Windmill = 15993,
+           RisingWindmill = 15995,
+           Cascade = 15989,
+           Fountain = 15990,
+           ReverseCascade = 15991,
+           Fountainfall = 15992,
+           FanDance1 = 16007,
+           FanDance2 = 16008,
+           FanDance3 = 16009,
+           FanDance4 = 25791,
+           Flourish = 16013,
+           Devilment = 16011,
+           StarfallDance = 25792;
 
-        public static class Buffs
+        static class Buffs
         {
             public const short
                 FlourishingSymmetry = 3017,
@@ -34,7 +34,7 @@ namespace XIVComboPlugin.Combos
                 FourfoldFanDance = 2699;
         }
 
-        public static class Levels
+        static class Levels
         {
             public const byte
                 Fountain = 2,

@@ -4,27 +4,19 @@ using Dalamud.Game.ClientState.JobGauge;
 
 namespace XIVComboPlugin.Combos
 {
-    public static class RPR
+    static class RPR
     {
-        public const uint
-            Slice = 24373,
-            WaxingSlice = 24374,
-            InfernalSlice = 24375,
-            Gibbet = 24382,
-            Gallows = 24383,
-            ShadowOfDeath = 24378,
-            SpinningScythe = 24376,
-            NightmareScythe = 24377,
-            Guillotine = 24384,
-            Enshroud = 24394,
-            Communio = 24398,
-            ArcaneCircle = 24405,
-            PlentifulHarvest = 24385,
-            HellsIngress = 24401,
-            HellsEgress = 24402,
-            Regress = 24403;
+        const uint
+           Slice = 24373,
+           WaxingSlice = 24374,
+           InfernalSlice = 24375,
+           Gibbet = 24382,
+           Gallows = 24383,
+           SpinningScythe = 24376,
+           NightmareScythe = 24377,
+           Guillotine = 24384;
 
-        public static class Buffs
+        static class Buffs
         {
             public const short
                 Enshrouded = 2593,
@@ -37,7 +29,7 @@ namespace XIVComboPlugin.Combos
                 Threshold = 2595;
         }
 
-        public static class Levels
+        static class Levels
         {
             public const byte
                 WaxingSlice = 5,

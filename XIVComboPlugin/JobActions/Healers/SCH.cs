@@ -5,17 +5,15 @@ using Dalamud.Game.ClientState.JobGauge.Types;
 
 namespace XIVComboPlugin.Combos
 {
-    public static class SCH
+    static class SCH
     {
-        public const uint
-            Physick = 190,
-            Adloquium = 185,
-            FeyBless = 16543,
-            Consolation = 16546,
-            EnergyDrain = 167,
-            Aetherflow = 166;
+        const uint
+           Physick = 190,
+           Adloquium = 185,
+           FeyBless = 16543,
+           Consolation = 16546;
 
-        public static class Levels
+        static class Levels
         {
             public const byte
                 Adloquium = 30;

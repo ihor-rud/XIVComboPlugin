@@ -5,15 +5,15 @@ using Dalamud.Game.ClientState.JobGauge.Types;
 
 namespace XIVComboPlugin.Combos
 {
-    public static class SGE
+    static class SGE
     {
-        public const uint
-            Diagnosis = 24284,
-            Druochole = 24296,
-            Dyskrasia = 24297,
-            Toxikon = 24304;
+        const uint
+           Diagnosis = 24284,
+           Druochole = 24296,
+           Dyskrasia = 24297,
+           Toxikon = 24304;
 
-        public static class Levels
+        static class Levels
         {
             public const byte
                 Druochole = 45,

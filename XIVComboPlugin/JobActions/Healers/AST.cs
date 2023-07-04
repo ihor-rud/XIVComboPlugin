@@ -6,17 +6,17 @@ using Dalamud.Game.ClientState.JobGauge.Types;
 
 namespace XIVComboPlugin.Combos
 {
-    public static class AST
+    static class AST
     {
-        public const uint
-            Benefic = 3594,
-            Benefic2 = 3610,
-            Play = 17055,
-            Draw = 3590,
-            MinorArcana = 7443,
-            CrownPlay = 25869;
+        const uint
+           Benefic = 3594,
+           Benefic2 = 3610,
+           Play = 17055,
+           Draw = 3590,
+           MinorArcana = 7443,
+           CrownPlay = 25869;
 
-        public static class Levels
+        static class Levels
         {
             public const byte
                 Benefic2 = 26;

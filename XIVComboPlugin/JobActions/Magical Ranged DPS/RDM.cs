@@ -5,26 +5,26 @@ using Dalamud.Game.ClientState.JobGauge.Types;
 
 namespace XIVComboPlugin.Combos
 {
-    public static class RDM
+    static class RDM
     {
-        public const uint
-            Verthunder = 7505,
-            Veraero = 7507,
-            Veraero2 = 16525,
-            Verthunder2 = 16524,
-            Redoublement = 7516,
-            Zwerchhau = 7512,
-            Riposte = 7504,
-            Scatter = 7509,
-            Verstone = 7511,
-            Verfire = 7510,
-            Jolt = 7503,
-            Verholy = 7526,
-            Verflare = 7525,
-            Scorch = 16530,
-            Resolution = 25858;
+        const uint
+           Verthunder = 7505,
+           Veraero = 7507,
+           Veraero2 = 16525,
+           Verthunder2 = 16524,
+           Redoublement = 7516,
+           Zwerchhau = 7512,
+           Riposte = 7504,
+           Scatter = 7509,
+           Verstone = 7511,
+           Verfire = 7510,
+           Jolt = 7503,
+           Verholy = 7526,
+           Verflare = 7525,
+           Scorch = 16530,
+           Resolution = 25858;
 
-        public static class Buffs
+        static class Buffs
         {
             public const short
                 Swiftcast = 167,
@@ -33,7 +33,7 @@ namespace XIVComboPlugin.Combos
                 Dualcast = 1249;
         }
 
-        public static class Levels
+        static class Levels
         {
             public const byte
                 Zwerchhau = 35,

@@ -1,8 +1,8 @@
-﻿using Dalamud.Plugin;
-using Dalamud.Game;
+﻿using Dalamud.Game;
 using Dalamud.Game.ClientState;
 using Dalamud.Game.ClientState.JobGauge;
 using Dalamud.IoC;
+using Dalamud.Plugin;
 
 namespace XIVComboPlugin
 {
@@ -14,7 +14,7 @@ namespace XIVComboPlugin
         [PluginService] public static ClientState ClientState { get; private set; } = null!;
         [PluginService] public static JobGauges JobGauges { get; private set; } = null!;
 
-        private IconReplacer iconReplacer;
+        private readonly IconReplacer iconReplacer;
 
         public XIVComboPlugin()
         {

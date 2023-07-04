@@ -4,16 +4,16 @@ using Dalamud.Game.ClientState.JobGauge;
 
 namespace XIVComboPlugin.Combos
 {
-    public static class MNK
+    static class MNK
     {
-        public const uint
-            Bootshine = 53,
-            DragonKick = 74,
-            ArmOfTheDestroyer = 62,
-            Rockbreaker = 70,
-            FourPointFury = 16473;
+        const uint
+           Bootshine = 53,
+           DragonKick = 74,
+           ArmOfTheDestroyer = 62,
+           Rockbreaker = 70,
+           FourPointFury = 16473;
 
-        public static class Buffs
+        static class Buffs
         {
             public const short
                 OpoOpoForm = 107,
@@ -24,7 +24,7 @@ namespace XIVComboPlugin.Combos
                 FormlessFist = 2513;
         }
 
-        public static class Levels
+        static class Levels
         {
             public const byte
                 Rockbreaker = 30,

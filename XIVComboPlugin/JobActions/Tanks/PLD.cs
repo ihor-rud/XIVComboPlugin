@@ -5,21 +5,21 @@ using Dalamud.Game.ClientState.Statuses;
 
 namespace XIVComboPlugin.Combos
 {
-    public static class PLD
+    static class PLD
     {
-        public const uint
-            FastBlade = 9,
-            RiotBlade = 15,
-            RageOfHalone = 21,
-            RoyalAuthority = 3539,
-            Atonement = 16460,
-            TotalEclipse = 7381,
-            Prominence = 16457,
-            HolySpirit = 7384,
-            HolyCircle = 16458,
-            Confiteor = 16459;
+        const uint
+           FastBlade = 9,
+           RiotBlade = 15,
+           RageOfHalone = 21,
+           RoyalAuthority = 3539,
+           Atonement = 16460,
+           TotalEclipse = 7381,
+           Prominence = 16457,
+           HolySpirit = 7384,
+           HolyCircle = 16458,
+           Confiteor = 16459;
 
-        public static class Buffs
+        static class Buffs
         {
             public const short
                 Requiescat = 1368,
@@ -27,7 +27,7 @@ namespace XIVComboPlugin.Combos
                 BladeOfFaithReady = 3019;
         }
 
-        public static class Levels
+        static class Levels
         {
             public const byte
                 RiotBlade = 4,

@@ -5,27 +5,27 @@ using Dalamud.Game.ClientState.JobGauge.Types;
 
 namespace XIVComboPlugin.Combos
 {
-    public static class SMN
+    static class SMN
     {
-        public const uint
-            Ruin1 = 163,
-            Ruin2 = 172,
-            Ruin3 = 3579,
-            Outburst = 16511,
-            TriDisaster = 25826,
-            EnergyDrain = 16508,
-            EnergySiphon = 16510,
-            Fester = 181,
-            Painflare = 3578,
-            Gemshine = 25883,
-            PreciousBrilliance = 25884,
-            SummonBahamut = 7427,
-            SummonPhoenix = 25800,
-            AstralImpulse = 25820,
-            FountainOfFire = 16514,
-            EnkindleBahamut = 7429;
+        const uint
+           Ruin1 = 163,
+           Ruin2 = 172,
+           Ruin3 = 3579,
+           Outburst = 16511,
+           TriDisaster = 25826,
+           EnergyDrain = 16508,
+           EnergySiphon = 16510,
+           Fester = 181,
+           Painflare = 3578,
+           Gemshine = 25883,
+           PreciousBrilliance = 25884,
+           SummonBahamut = 7427,
+           SummonPhoenix = 25800,
+           AstralImpulse = 25820,
+           FountainOfFire = 16514,
+           EnkindleBahamut = 7429;
 
-        public static class Levels
+        static class Levels
         {
             public const byte
                 PreciousBrilliance = 26,

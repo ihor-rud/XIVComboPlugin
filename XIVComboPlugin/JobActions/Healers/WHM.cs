@@ -5,16 +5,16 @@ using Dalamud.Game.ClientState.JobGauge.Types;
 
 namespace XIVComboPlugin.Combos
 {
-    public static class WHM
+    static class WHM
     {
-        public const uint
-            Cure = 120,
-            Medica = 124,
-            Cure2 = 135,
-            AfflatusSolace = 16531,
-            AfflatusRapture = 16534;
+        const uint
+           Cure = 120,
+           Medica = 124,
+           Cure2 = 135,
+           AfflatusSolace = 16531,
+           AfflatusRapture = 16534;
 
-        public static class Levels
+        static class Levels
         {
             public const byte
                 Cure2 = 30,

@@ -4,18 +4,18 @@ using Dalamud.Game.ClientState.JobGauge;
 
 namespace XIVComboPlugin.Combos
 {
-    public static class GNB
+    static class GNB
     {
-        public const uint
-            KeenEdge = 16137,
-            BrutalShell = 16139,
-            SolidBarrel = 16145,
-            DemonSlice = 16141,
-            DemonSlaughter = 16149,
-            GnashingFang = 16146,
-            Continuation = 16155;
+        const uint
+           KeenEdge = 16137,
+           BrutalShell = 16139,
+           SolidBarrel = 16145,
+           DemonSlice = 16141,
+           DemonSlaughter = 16149,
+           GnashingFang = 16146,
+           Continuation = 16155;
 
-        public static class Buffs
+        static class Buffs
         {
             public const short
                 ReadyToRip = 1842,
@@ -23,7 +23,7 @@ namespace XIVComboPlugin.Combos
                 ReadyToGouge = 1844;
         }
 
-        public static class Levels
+        static class Levels
         {
             public const byte
                 BrutalShell = 4,
