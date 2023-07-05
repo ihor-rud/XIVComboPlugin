@@ -12,7 +12,9 @@ namespace XIVComboPlugin.Combos
            Fire = 141,
            Fire3 = 152,
            Fire4 = 3577,
+           Blizzard1 = 142,
            Blizzard2 = 25793,
+           Blizzard3 = 154,
            Blizzard4 = 3576,
            Freeze = 159,
            Transpose = 149,
@@ -31,6 +33,7 @@ namespace XIVComboPlugin.Combos
         static class Levels
         {
             public const byte
+                Blizzard3 = 35,
                 Fire3 = 35,
                 Freeze = 40,
                 BetweenTheLines = 62,
@@ -49,6 +52,13 @@ namespace XIVComboPlugin.Combos
             public override ulong? Invoke(uint actionID, uint lastMove, float comboTime, Func<uint, ulong> originalHook)
             {
                 var level = this.clientState.LocalPlayer.Level;
+
+                if (actionID == BLM.Blizzard1 || actionID == BLM.Blizzard3)
+                {
+                    if (level >= Levels.Blizzard3)
+                        return BLM.Blizzard3;
+                    return BLM.Blizzard1;
+                }
 
                 if (actionID == BLM.Fire)
                 {
