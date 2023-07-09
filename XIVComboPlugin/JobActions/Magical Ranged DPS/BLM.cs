@@ -55,17 +55,19 @@ namespace XIVComboPlugin.Combos
 
                 if (actionID == BLM.Blizzard1 || actionID == BLM.Blizzard3)
                 {
-                    if (level >= Levels.Blizzard3)
+                    var gauge = GetJobGauge<BLMGauge>();
+                    if (level >= Levels.Blizzard3 && !gauge.IsParadoxActive)
                         return BLM.Blizzard3;
-                    return BLM.Blizzard1;
+                    return originalHook(BLM.Blizzard1);
                 }
 
                 if (actionID == BLM.Fire)
                 {
                     var gauge = GetJobGauge<BLMGauge>();
+                    if (gauge.IsParadoxActive)
+                        return originalHook(BLM.Fire);
                     if (level >= Levels.Fire3 && (!gauge.InAstralFire || HasEffect(Buffs.Firestarter)))
                         return BLM.Fire3;
-                    return originalHook(BLM.Fire);
                 }
 
                 if (actionID == BLM.Blizzard4 || actionID == BLM.Fire4)

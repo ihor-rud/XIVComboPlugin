@@ -9,7 +9,9 @@ namespace XIVComboPlugin.Combos
     {
         const uint
            Diagnosis = 24284,
+           Prognosis = 24286,
            Druochole = 24296,
+           Ixochole = 24299,
            Dyskrasia = 24297,
            Toxikon = 24304;
 
@@ -17,6 +19,7 @@ namespace XIVComboPlugin.Combos
         {
             public const byte
                 Druochole = 45,
+                Ixochole = 52,
                 Toxikon = 66;
         }
 
@@ -37,6 +40,13 @@ namespace XIVComboPlugin.Combos
                     var gauge = GetJobGauge<SGEGauge>();
                     if (level > Levels.Druochole && gauge.Addersgall > 0 && !gauge.Eukrasia)
                         return SGE.Druochole;
+                }
+
+                if (actionID == SGE.Prognosis)
+                {
+                    var gauge = GetJobGauge<SGEGauge>();
+                    if (level > Levels.Ixochole && gauge.Addersgall > 0 && !gauge.Eukrasia)
+                        return SGE.Ixochole;
                 }
 
                 if (actionID == SGE.Dyskrasia)
