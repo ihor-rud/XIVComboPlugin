@@ -8,9 +8,9 @@ namespace XIVComboPlugin.Combos
     static class RDM
     {
         const uint
-           Verthunder = 7505,
            Veraero = 7507,
            Veraero2 = 16525,
+           Verthunder = 7505,
            Verthunder2 = 16524,
            Redoublement = 7516,
            Zwerchhau = 7512,
@@ -30,6 +30,7 @@ namespace XIVComboPlugin.Combos
                 Swiftcast = 167,
                 VerfireReady = 1234,
                 VerstoneReady = 1235,
+                Acceleration = 1238,
                 Dualcast = 1249;
         }
 
@@ -56,13 +57,13 @@ namespace XIVComboPlugin.Combos
 
                 if (actionID == RDM.Veraero2)
                 {
-                    if (HasEffect(Buffs.Swiftcast) || HasEffect(Buffs.Dualcast))
+                    if (HasEffect(Buffs.Swiftcast) || HasEffect(Buffs.Dualcast) || HasEffect(Buffs.Acceleration))
                         return originalHook(RDM.Scatter);
                 }
 
                 if (actionID == RDM.Verthunder2)
                 {
-                    if (HasEffect(Buffs.Swiftcast) || HasEffect(Buffs.Dualcast))
+                    if (HasEffect(Buffs.Swiftcast) || HasEffect(Buffs.Dualcast) || HasEffect(Buffs.Acceleration))
                         return originalHook(RDM.Scatter);
                 }
 
@@ -85,10 +86,10 @@ namespace XIVComboPlugin.Combos
                     if (level >= Levels.Resolution && lastMove == RDM.Scorch)
                         return RDM.Resolution;
 
-                    if (GetJobGauge<RDMGauge>().ManaStacks == 3)
+                    if (GetJobGauge<RDMGauge>().ManaStacks >= 3)
                         return originalHook(RDM.Verthunder2);
 
-                    if (HasEffect(Buffs.Swiftcast) || HasEffect(Buffs.Dualcast))
+                    if (HasEffect(Buffs.Swiftcast) || HasEffect(Buffs.Dualcast) || HasEffect(Buffs.Acceleration))
                         return originalHook(RDM.Verthunder);
 
                     if (HasEffect(Buffs.VerfireReady))
@@ -105,10 +106,10 @@ namespace XIVComboPlugin.Combos
                     if (level >= Levels.Resolution && lastMove == RDM.Scorch)
                         return RDM.Resolution;
 
-                    if (GetJobGauge<RDMGauge>().ManaStacks == 3)
+                    if (GetJobGauge<RDMGauge>().ManaStacks >= 3)
                         return originalHook(RDM.Veraero2);
 
-                    if (HasEffect(Buffs.Swiftcast) || HasEffect(Buffs.Dualcast))
+                    if (HasEffect(Buffs.Swiftcast) || HasEffect(Buffs.Dualcast) || HasEffect(Buffs.Acceleration))
                         return originalHook(RDM.Veraero);
 
                     if (HasEffect(Buffs.VerstoneReady))

@@ -79,9 +79,9 @@ namespace XIVComboPlugin.Combos
 
                 if (actionID == PLD.HolySpirit || actionID == PLD.HolyCircle)
                 {
-                    var x = originalHook(PLD.Confiteor);
-                    if (x != PLD.Confiteor)
-                        return x;
+                    var originalConfiteor = originalHook(PLD.Confiteor);
+                    if (originalConfiteor != PLD.Confiteor)
+                        return originalConfiteor;
 
                     Status requiescat = FindEffect(Buffs.Requiescat);
 

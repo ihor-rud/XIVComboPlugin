@@ -63,10 +63,10 @@ namespace XIVComboPlugin.Combos
 
                 if (actionID == SMN.SummonBahamut || actionID == SMN.SummonPhoenix)
                 {
-                    var original = originalHook(SMN.Ruin1);
-                    if (original == SMN.AstralImpulse && level >= Levels.SummonBahamut)
+                    var originalRuin = originalHook(SMN.Ruin1);
+                    if (originalRuin == SMN.AstralImpulse && level >= Levels.SummonBahamut)
                         return originalHook(SMN.EnkindleBahamut);
-                    if (original == SMN.FountainOfFire)
+                    if (originalRuin == SMN.FountainOfFire)
                         return originalHook(SMN.EnkindleBahamut);
                 }
 

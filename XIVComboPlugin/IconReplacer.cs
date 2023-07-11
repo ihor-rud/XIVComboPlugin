@@ -101,6 +101,11 @@ namespace XIVComboPlugin
             var comboTime = Marshal.PtrToStructure<float>(comboTimer);
             var jobId = this.clientState.LocalPlayer.ClassJob.Id;
 
+            if (!combos.ContainsKey(jobId))
+            {
+                return iconHook.Original(self, actionID);
+            }
+
             var combo = combos[jobId];
             var action = combo.Invoke(actionID, (uint)lastMove, comboTime, (actionID) => iconHook.Original(self, actionID));
             return action ?? iconHook.Original(self, actionID);

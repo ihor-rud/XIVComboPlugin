@@ -142,9 +142,9 @@ namespace XIVComboPlugin.Combos
                     if (level >= Levels.Shoha && gauge.MeditationStacks >= 3)
                         return SAM.Shoha;
 
-                    var x = originalHook(SAM.TsubameGaeshi);
-                    if (level >= Levels.TsubameGaeshi && x != SAM.TsubameGaeshi)
-                        return x;
+                    var originalTsubameGaeshi = originalHook(SAM.TsubameGaeshi);
+                    if (originalTsubameGaeshi != SAM.TsubameGaeshi)
+                        return originalTsubameGaeshi;
                 }
 
                 if (actionID == SAM.Kyuten)
@@ -161,9 +161,9 @@ namespace XIVComboPlugin.Combos
                         if (HasEffect(Buffs.OgiNamikiriReady))
                             return SAM.OgiNamikiri;
 
-                        var x = originalHook(SAM.OgiNamikiri);
-                        if (x != SAM.OgiNamikiri)
-                            return x;
+                        var originalOgiNamikiri = originalHook(SAM.OgiNamikiri);
+                        if (originalOgiNamikiri != SAM.OgiNamikiri)
+                            return originalOgiNamikiri;
                     }
 
                     return SAM.Ikishoten;

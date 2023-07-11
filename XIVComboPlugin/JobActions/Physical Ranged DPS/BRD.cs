@@ -39,9 +39,9 @@ namespace XIVComboPlugin.Combos
                 if (actionID == BRD.QuickNock)
                 {
                     var gauge = GetJobGauge<BRDGauge>();
-                    var x = originalHook(BRD.ApexArrow);
-                    if (gauge.SoulVoice == 100 || x != BRD.ApexArrow)
-                        return x;
+                    var originalApexArrow = originalHook(BRD.ApexArrow);
+                    if (gauge.SoulVoice == 100 || originalApexArrow != BRD.ApexArrow)
+                        return originalApexArrow;
                 }
 
                 return null;

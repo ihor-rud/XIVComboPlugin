@@ -22,13 +22,17 @@ namespace XIVComboPlugin.Combos
            DraconianFury = 25770,
            SonicThrust = 7397,
            CoerthanTorment = 16477,
-           WyrmwindThrust = 25773;
+           WyrmwindThrust = 25773,
+           Jump = 92,
+           HighJump = 16478,
+           MirageDive = 7399;
 
         static class Buffs
         {
             public const short
                 SharperFangAndClaw = 802,
-                EnhancedWheelingThrust = 803;
+                EnhancedWheelingThrust = 803,
+                DiveReady = 1243;
         }
 
         static class Levels
@@ -115,6 +119,12 @@ namespace XIVComboPlugin.Combos
                         return DRG.WheelingThrust;
 
                     return originalHook(DRG.TrueThrust);
+                }
+
+                if (actionID == DRG.HighJump || actionID == DRG.Jump)
+                {
+                    if (HasEffect(Buffs.DiveReady))
+                        return DRG.MirageDive;
                 }
 
                 return null;
