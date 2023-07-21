@@ -29,9 +29,11 @@ namespace XIVComboPlugin.Combos
             public const short
                 FlourishingSymmetry = 3017,
                 FlourishingFlow = 3018,
-                FlourishingFanDance = 1820,
+                ThreefoldFanDance = 1820,
+                FourfoldFanDance = 2699,
                 FlourishingStarfall = 2700,
-                FourfoldFanDance = 2699;
+                SilkenSymmetry = 2693,
+                SilkenFlow = 2694;
         }
 
         static class Levels
@@ -61,10 +63,10 @@ namespace XIVComboPlugin.Combos
 
                 if (actionID == DNC.Windmill)
                 {
-                    if (level >= Levels.Bloodshower && HasEffect(Buffs.FlourishingFlow))
+                    if (level >= Levels.Bloodshower && (HasEffect(Buffs.SilkenFlow) || HasEffect(Buffs.FlourishingFlow)))
                         return DNC.Bloodshower;
 
-                    if (level >= Levels.RisingWindmill && HasEffect(Buffs.FlourishingSymmetry))
+                    if (level >= Levels.RisingWindmill && (HasEffect(Buffs.SilkenSymmetry) || HasEffect(Buffs.FlourishingSymmetry)))
                         return DNC.RisingWindmill;
 
                     if (comboTime > 0)
@@ -79,10 +81,10 @@ namespace XIVComboPlugin.Combos
                     if (GetJobGauge<DNCGauge>().IsDancing)
                         return originalHook(DNC.Cascade);
 
-                    if (level >= Levels.Fountainfall && HasEffect(Buffs.FlourishingFlow))
+                    if (level >= Levels.Fountainfall && (HasEffect(Buffs.SilkenFlow) || HasEffect(Buffs.FlourishingFlow)))
                         return DNC.Fountainfall;
 
-                    if (level >= Levels.ReverseCascade && HasEffect(Buffs.FlourishingSymmetry))
+                    if (level >= Levels.ReverseCascade && (HasEffect(Buffs.SilkenSymmetry) || HasEffect(Buffs.FlourishingSymmetry)))
                         return DNC.ReverseCascade;
 
                     if (lastMove == DNC.Cascade && level >= Levels.Fountain)
@@ -91,7 +93,7 @@ namespace XIVComboPlugin.Combos
 
                 if (actionID == DNC.FanDance1 || actionID == DNC.FanDance2)
                 {
-                    if (HasEffect(Buffs.FlourishingFanDance))
+                    if (HasEffect(Buffs.ThreefoldFanDance))
                         return DNC.FanDance3;
                 }
 
