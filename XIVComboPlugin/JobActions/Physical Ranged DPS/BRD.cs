@@ -1,6 +1,5 @@
 ﻿using System;
-using Dalamud.Game.ClientState;
-using Dalamud.Game.ClientState.JobGauge;
+using Dalamud.Plugin.Services;
 using Dalamud.Game.ClientState.JobGauge.Types;
 
 namespace XIVComboPlugin.Combos
@@ -22,7 +21,7 @@ namespace XIVComboPlugin.Combos
 
         public class Combo : CustomCombo
         {
-            public Combo(ClientState clientState, JobGauges jobGauges) : base(clientState, jobGauges)
+            public Combo(IClientState clientState, IJobGauges jobGauges) : base(clientState, jobGauges)
             {
                 this.ClassID = 5;
                 this.JobID = 23;

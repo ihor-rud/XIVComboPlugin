@@ -1,6 +1,5 @@
 using System;
-using Dalamud.Game.ClientState;
-using Dalamud.Game.ClientState.JobGauge;
+using Dalamud.Plugin.Services;
 using Dalamud.Game.ClientState.JobGauge.Types;
 using Dalamud.Game.ClientState.Statuses;
 
@@ -10,7 +9,7 @@ namespace XIVComboPlugin.Combos
 
     public abstract partial class CustomCombo
     {
-        protected CustomCombo(ClientState clientState, JobGauges jobGauges)
+        protected CustomCombo(IClientState clientState, IJobGauges jobGauges)
         {
             this.clientState = clientState;
             this.jobGauges = jobGauges;
@@ -53,7 +52,7 @@ namespace XIVComboPlugin.Combos
 
         public byte ClassID;
         public byte JobID;
-        protected ClientState clientState;
-        protected JobGauges jobGauges;
+        protected IClientState clientState;
+        protected IJobGauges jobGauges;
     }
 }

@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Dalamud.Game;
-using Dalamud.Game.ClientState;
-using Dalamud.Game.ClientState.JobGauge;
+using Dalamud.Plugin.Services;
 using Dalamud.Hooking;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using XIVComboPlugin.Combos;
@@ -19,26 +18,27 @@ namespace XIVComboPlugin
         private readonly IconReplacerAddressResolver Address;
         private readonly Hook<OnCheckIsIconReplaceableDelegate> checkerHook;
 
-        private readonly ClientState clientState;
-        private readonly IntPtr comboTimer;
+        private readonly IClientState clientState;
+        private IntPtr comboTimer;
 
         private readonly Dictionary<uint, CustomCombo> combos = new();
         private readonly Hook<OnGetIconDelegate> iconHook;
-        private readonly IntPtr lastComboMove;
+        private IntPtr lastComboMove;
 
-        public unsafe IconReplacer(SigScanner scanner, ClientState clientState, JobGauges jobGauges)
+        public unsafe IconReplacer(ISigScanner scanner, IClientState clientState, IJobGauges jobGauges, IGameInteropProvider hookProvider)
         {
             this.clientState = clientState;
 
             Address = new IconReplacerAddressResolver();
             Address.Setup(scanner);
 
-            var actionmanager = (byte*)ActionManager.Instance();
-            comboTimer = (IntPtr)(actionmanager + 0x60);
-            lastComboMove = comboTimer + 0x4;
+            if (!clientState.IsLoggedIn)
+                clientState.Login += SetupComboData;
+            else
+                SetupComboData();
 
-            iconHook = Hook<OnGetIconDelegate>.FromAddress(Address.GetIcon, GetIconDetour);
-            checkerHook = Hook<OnCheckIsIconReplaceableDelegate>.FromAddress(Address.IsIconReplaceable, (_) => 1);
+            iconHook = hookProvider.HookFromAddress<OnGetIconDelegate>(Address.GetIcon, GetIconDetour);
+            checkerHook = hookProvider.HookFromAddress<OnCheckIsIconReplaceableDelegate>(Address.IsIconReplaceable, (_) => 1);
 
             CustomCombo[] comboList = {
                 // Tanks
@@ -97,6 +97,12 @@ namespace XIVComboPlugin
                 return iconHook.Original(self, actionID);
             }
 
+            if (lastComboMove == IntPtr.Zero)
+            {
+                SetupComboData();
+                return iconHook.Original(self, actionID);
+            }
+
             var lastMove = Marshal.ReadInt32(lastComboMove);
             var comboTime = Marshal.PtrToStructure<float>(comboTimer);
             var jobId = this.clientState.LocalPlayer.ClassJob.Id;
@@ -109,6 +115,13 @@ namespace XIVComboPlugin
             var combo = combos[jobId];
             var action = combo.Invoke(actionID, (uint)lastMove, comboTime, (actionID) => iconHook.Original(self, actionID));
             return action ?? iconHook.Original(self, actionID);
+        }
+
+        public unsafe void SetupComboData()
+        {
+            var actionmanager = (byte*)ActionManager.Instance();
+            this.comboTimer = (IntPtr)(actionmanager + 0x60);
+            this.lastComboMove = comboTimer + 0x4;
         }
     }
 }

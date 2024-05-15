@@ -1,7 +1,5 @@
 ﻿using Dalamud.Game;
-using Dalamud.Game.ClientState;
-using Dalamud.Game.ClientState.JobGauge;
-using Dalamud.IoC;
+using Dalamud.Plugin.Services;
 using Dalamud.Plugin;
 
 namespace XIVComboPlugin
@@ -10,15 +8,16 @@ namespace XIVComboPlugin
     {
         public string Name => "XIV Combo Plugin";
 
-        [PluginService] public static SigScanner TargetModuleScanner { get; private set; } = null!;
-        [PluginService] public static ClientState ClientState { get; private set; } = null!;
-        [PluginService] public static JobGauges JobGauges { get; private set; } = null!;
+        public ISigScanner TargetModuleScanner { get; init; }
+        public IClientState ClientState { get; init; }
+        public IJobGauges JobGauges { get; init; }
+        public IGameInteropProvider HookProvider { get; init; }
 
         private readonly IconReplacer iconReplacer;
 
         public XIVComboPlugin()
         {
-            this.iconReplacer = new IconReplacer(TargetModuleScanner, ClientState, JobGauges);
+            this.iconReplacer = new IconReplacer(TargetModuleScanner, ClientState, JobGauges, HookProvider);
             this.iconReplacer.Enable();
         }
 
