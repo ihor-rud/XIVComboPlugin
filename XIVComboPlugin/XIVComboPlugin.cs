@@ -7,17 +7,11 @@ namespace XIVComboPlugin
     class XIVComboPlugin : IDalamudPlugin
     {
         public string Name => "XIV Combo Plugin";
-
-        public ISigScanner TargetModuleScanner { get; init; }
-        public IClientState ClientState { get; init; }
-        public IJobGauges JobGauges { get; init; }
-        public IGameInteropProvider HookProvider { get; init; }
-
         private readonly IconReplacer iconReplacer;
 
-        public XIVComboPlugin()
+        public XIVComboPlugin(ISigScanner scanner, IClientState clientState, IJobGauges jobGauges, IGameInteropProvider hookProvider)
         {
-            this.iconReplacer = new IconReplacer(TargetModuleScanner, ClientState, JobGauges, HookProvider);
+            this.iconReplacer = new IconReplacer(scanner, clientState, jobGauges, hookProvider);
             this.iconReplacer.Enable();
         }
 

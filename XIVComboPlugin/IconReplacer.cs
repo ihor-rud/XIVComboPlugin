@@ -21,7 +21,7 @@ namespace XIVComboPlugin
         private readonly IClientState clientState;
         private IntPtr comboTimer;
 
-        private readonly Dictionary<uint, CustomCombo> combos = new();
+        private readonly Dictionary<uint, CustomCombo> combos = [];
         private readonly Hook<OnGetIconDelegate> iconHook;
         private IntPtr lastComboMove;
 
@@ -29,8 +29,7 @@ namespace XIVComboPlugin
         {
             this.clientState = clientState;
 
-            Address = new IconReplacerAddressResolver();
-            Address.Setup(scanner);
+            Address = new IconReplacerAddressResolver(scanner);
 
             if (!clientState.IsLoggedIn)
                 clientState.Login += SetupComboData;
@@ -40,7 +39,7 @@ namespace XIVComboPlugin
             iconHook = hookProvider.HookFromAddress<OnGetIconDelegate>(Address.GetIcon, GetIconDetour);
             checkerHook = hookProvider.HookFromAddress<OnCheckIsIconReplaceableDelegate>(Address.IsIconReplaceable, (_) => 1);
 
-            CustomCombo[] comboList = {
+            CustomCombo[] comboList = [
                 // Tanks
                 new PLD.Combo(clientState, jobGauges),
                 new WAR.Combo(clientState, jobGauges),
@@ -69,7 +68,7 @@ namespace XIVComboPlugin
                 new SCH.Combo(clientState, jobGauges),
                 new AST.Combo(clientState, jobGauges),
                 new SGE.Combo(clientState, jobGauges),
-            };
+            ];
 
             foreach (var item in comboList)
             {
