@@ -2,70 +2,62 @@
 using Dalamud.Plugin.Services;
 using Dalamud.Game.ClientState.JobGauge.Types;
 
-namespace XIVComboPlugin.Combos
+namespace XIVComboPlugin.Combos;
+
+static class MCH
 {
-    static class MCH
+    const uint
+       CleanShot = 2873,
+       HeatedCleanShot = 7413,
+       SplitShot = 2866,
+       HeatedSplitShot = 7411,
+       SlugShot = 2868,
+       HeatedSlugShot = 7412,
+
+       HeatBlast = 7410,
+       SpreadShot = 2870,
+       Scattergun = 25786,
+       AutoCrossbow = 16497;
+
+    static class Levels
     {
-        const uint
-           CleanShot = 2873,
-           HeatedCleanShot = 7413,
-           SplitShot = 2866,
-           SlugShot = 2868,
-           HeatBlast = 7410,
-           SpreadShot = 2870,
-           Scattergun = 25786,
-           AutoCrossbow = 16497;
+        public const byte
+            SlugShot = 2,
+            CleanShot = 26,
+            HeatBlast = 35,
+            AutoCrossbow = 52;
+    }
 
-        static class Levels
+    public class Combo(IClientState clientState, IJobGauges jobGauges) : ComboHelpers<MCHGauge>(clientState, jobGauges)
+    {
+        public override uint? Invoke(uint actionId, uint lastMove, Func<uint, uint> originalHook)
         {
-            public const byte
-                SlugShot = 2,
-                CleanShot = 26,
-                HeatBlast = 35,
-                AutoCrossbow = 52;
-        }
+            var level = PlayerLevel();
 
-        public class Combo : CustomCombo
-        {
-            public Combo(IClientState clientState, IJobGauges jobGauges) : base(clientState, jobGauges)
+            if (actionId == MCH.CleanShot || actionId == MCH.HeatedCleanShot)
             {
-                this.ClassID = 0;
-                this.JobID = 31;
+                if (GetJobGauge().IsOverheated && level >= Levels.HeatBlast)
+                    return originalHook(MCH.HeatBlast);
+
+                if ((lastMove == MCH.SplitShot || lastMove == MCH.HeatedSplitShot) && level >= Levels.SlugShot)
+                    return originalHook(MCH.SlugShot);
+
+                if ((lastMove == MCH.SlugShot || lastMove == MCH.HeatedSlugShot) && level >= Levels.CleanShot)
+                    return originalHook(MCH.CleanShot);
+
+                return originalHook(MCH.SplitShot);
             }
 
-            public override ulong? Invoke(uint actionID, uint lastMove, float comboTime, Func<uint, ulong> originalHook)
+            if (actionId == MCH.SpreadShot || actionId == MCH.Scattergun)
             {
-                var level = this.clientState.LocalPlayer.Level;
-
-                if (actionID == MCH.CleanShot || actionID == MCH.HeatedCleanShot)
-                {
-                    if (GetJobGauge<MCHGauge>().IsOverheated && level >= Levels.HeatBlast)
-                        return MCH.HeatBlast;
-
-                    if (comboTime > 0)
-                    {
-                        if (lastMove == MCH.SplitShot && level >= Levels.SlugShot)
-                        {
-                            return originalHook(MCH.SlugShot);
-                        }
-
-                        if (lastMove == MCH.SlugShot && level >= Levels.CleanShot)
-                        {
-                            return originalHook(MCH.CleanShot);
-                        }
-                    }
-
-                    return originalHook(MCH.SplitShot);
-                }
-
-                if (actionID == MCH.SpreadShot || actionID == MCH.Scattergun)
-                {
-                    if (GetJobGauge<MCHGauge>().IsOverheated && level >= Levels.AutoCrossbow)
-                        return MCH.AutoCrossbow;
-                }
-
-                return null;
+                if (GetJobGauge().IsOverheated && level >= Levels.AutoCrossbow)
+                    return MCH.AutoCrossbow;
             }
+
+            return null;
         }
+
+        public override byte ClassId => 0;
+        public override byte JobId => 31;
     }
 }

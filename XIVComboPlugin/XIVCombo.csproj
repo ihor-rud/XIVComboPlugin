@@ -31,6 +31,10 @@
       <Private>false</Private>
       <HintPath>/mnt/c/Users/Ihor/AppData/Roaming/XIVLauncher/addon/Hooks/dev/Dalamud.dll</HintPath>
     </Reference>
+    <Reference Include="InteropGenerator.Runtime">
+      <Private>false</Private>
+      <HintPath>/mnt/c/Users/Ihor/AppData/Roaming/XIVLauncher/addon/Hooks/dev/InteropGenerator.Runtime.dll</HintPath>
+    </Reference>
     <Reference Include="FFXIVClientStructs">
       <Private>false</Private>
       <HintPath>/mnt/c/Users/Ihor/AppData/Roaming/XIVLauncher/addon/Hooks/dev/FFXIVClientStructs.dll</HintPath>

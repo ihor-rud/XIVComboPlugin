@@ -2,56 +2,52 @@
 using Dalamud.Plugin.Services;
 using Dalamud.Game.ClientState.JobGauge.Types;
 
-namespace XIVComboPlugin.Combos
+namespace XIVComboPlugin.Combos;
+
+static class WHM
 {
-    static class WHM
+    const uint
+       Cure = 120,
+       Medica = 124,
+       Cure2 = 135,
+       AfflatusSolace = 16531,
+       AfflatusRapture = 16534;
+
+    static class Levels
     {
-        const uint
-           Cure = 120,
-           Medica = 124,
-           Cure2 = 135,
-           AfflatusSolace = 16531,
-           AfflatusRapture = 16534;
+        public const byte
+            Cure2 = 30,
+            AfflatusSolace = 52,
+            AfflatusRapture = 76;
+    }
 
-        static class Levels
+    public class Combo(IClientState clientState, IJobGauges jobGauges) : ComboHelpers<WHMGauge>(clientState, jobGauges)
+    {
+        public override uint? Invoke(uint actionId, uint lastMove, Func<uint, uint> originalHook)
         {
-            public const byte
-                Cure2 = 30,
-                AfflatusSolace = 52,
-                AfflatusRapture = 76;
-        }
+            var level = PlayerLevel();
 
-        public class Combo : CustomCombo
-        {
-            public Combo(IClientState clientState, IJobGauges jobGauges) : base(clientState, jobGauges)
+            if (actionId == WHM.Cure || actionId == WHM.Cure2 || actionId == WHM.AfflatusSolace)
             {
-                this.ClassID = 6;
-                this.JobID = 24;
+                if (level >= Levels.AfflatusSolace && GetJobGauge().Lily > 0)
+                    return WHM.AfflatusSolace;
+
+                if (level >= Levels.Cure2)
+                    return WHM.Cure2;
+
+                return WHM.Cure;
             }
 
-            public override ulong? Invoke(uint actionID, uint lastMove, float comboTime, Func<uint, ulong> originalHook)
+            if (actionId == WHM.Medica || actionId == WHM.AfflatusRapture)
             {
-                var level = this.clientState.LocalPlayer.Level;
-
-                if (actionID == WHM.Cure || actionID == WHM.Cure2)
-                {
-                    if (level >= Levels.AfflatusSolace && GetJobGauge<WHMGauge>().Lily > 0)
-                        return WHM.AfflatusSolace;
-
-                    if (level >= Levels.Cure2)
-                        return WHM.Cure2;
-
-                    return WHM.Cure;
-                }
-
-                if (actionID == WHM.Medica)
-                {
-                    if (level >= Levels.AfflatusRapture && GetJobGauge<WHMGauge>().Lily > 0)
-                        return WHM.AfflatusRapture;
-                }
-
-                return null;
+                if (level >= Levels.AfflatusRapture && GetJobGauge().Lily > 0)
+                    return WHM.AfflatusRapture;
             }
+
+            return null;
         }
+
+        public override byte ClassId => 6;
+        public override byte JobId => 24;
     }
 }

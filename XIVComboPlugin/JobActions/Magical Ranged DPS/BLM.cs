@@ -2,111 +2,107 @@
 using Dalamud.Plugin.Services;
 using Dalamud.Game.ClientState.JobGauge.Types;
 
-namespace XIVComboPlugin.Combos
+namespace XIVComboPlugin.Combos;
+
+static class BLM
 {
-    static class BLM
+    const uint
+       Scathe = 156,
+       Fire = 141,
+       Fire3 = 152,
+       Fire4 = 3577,
+       Blizzard1 = 142,
+       Blizzard2 = 25793,
+       Blizzard3 = 154,
+       Blizzard4 = 3576,
+       Freeze = 159,
+       Transpose = 149,
+       UmbralSoul = 16506,
+       LeyLines = 3573,
+       BetweenTheLines = 7419,
+       Xenoglossy = 16507;
+
+    static class Buffs
     {
-        const uint
-           Scathe = 156,
-           Fire = 141,
-           Fire3 = 152,
-           Fire4 = 3577,
-           Blizzard1 = 142,
-           Blizzard2 = 25793,
-           Blizzard3 = 154,
-           Blizzard4 = 3576,
-           Freeze = 159,
-           Transpose = 149,
-           UmbralSoul = 16506,
-           LeyLines = 3573,
-           BetweenTheLines = 7419,
-           Xenoglossy = 16507;
+        public const short
+            LeyLines = 737,
+            Firestarter = 165;
+    }
 
-        static class Buffs
-        {
-            public const short
-                LeyLines = 737,
-                Firestarter = 165;
-        }
+    static class Levels
+    {
+        public const byte
+            Blizzard3 = 35,
+            Fire3 = 35,
+            Freeze = 40,
+            BetweenTheLines = 62,
+            UmbralSoul = 76,
+            Xenoglossy = 80;
+    }
 
-        static class Levels
+    public class Combo(IClientState clientState, IJobGauges jobGauges) : ComboHelpers<BLMGauge>(clientState, jobGauges)
+    {
+        public override uint? Invoke(uint actionId, uint lastMove, Func<uint, uint> originalHook)
         {
-            public const byte
-                Blizzard3 = 35,
-                Fire3 = 35,
-                Freeze = 40,
-                BetweenTheLines = 62,
-                UmbralSoul = 76,
-                Xenoglossy = 80;
-        }
+            var level = PlayerLevel();
 
-        public class Combo : CustomCombo
-        {
-            public Combo(IClientState clientState, IJobGauges jobGauges) : base(clientState, jobGauges)
+            if (actionId == BLM.Blizzard1 || actionId == BLM.Blizzard3)
             {
-                this.ClassID = 7;
-                this.JobID = 25;
+                var gauge = GetJobGauge();
+                if (level >= Levels.Blizzard3 && !gauge.IsParadoxActive)
+                    return BLM.Blizzard3;
+                return originalHook(BLM.Blizzard1);
             }
 
-            public override ulong? Invoke(uint actionID, uint lastMove, float comboTime, Func<uint, ulong> originalHook)
+            if (actionId == BLM.Fire)
             {
-                var level = this.clientState.LocalPlayer.Level;
-
-                if (actionID == BLM.Blizzard1 || actionID == BLM.Blizzard3)
-                {
-                    var gauge = GetJobGauge<BLMGauge>();
-                    if (level >= Levels.Blizzard3 && !gauge.IsParadoxActive)
-                        return BLM.Blizzard3;
-                    return originalHook(BLM.Blizzard1);
-                }
-
-                if (actionID == BLM.Fire)
-                {
-                    var gauge = GetJobGauge<BLMGauge>();
-                    if (gauge.IsParadoxActive)
-                        return originalHook(BLM.Fire);
-                    if (level >= Levels.Fire3 && (!gauge.InAstralFire || HasEffect(Buffs.Firestarter)))
-                        return BLM.Fire3;
-                }
-
-                if (actionID == BLM.Blizzard4 || actionID == BLM.Fire4)
-                {
-                    var gauge = GetJobGauge<BLMGauge>();
-                    if (gauge.InUmbralIce)
-                        return BLM.Blizzard4;
-                    return BLM.Fire4;
-                }
-
-                if (actionID == BLM.Freeze || actionID == BLM.Blizzard2)
-                {
-                    var gauge = GetJobGauge<BLMGauge>();
-                    if (gauge.InUmbralIce && level >= Levels.Freeze)
-                        return BLM.Freeze;
-                    return originalHook(BLM.Blizzard2);
-                }
-
-                if (actionID == BLM.Transpose || actionID == BLM.UmbralSoul)
-                {
-                    var gauge = GetJobGauge<BLMGauge>();
-                    if (gauge.InUmbralIce && level >= Levels.UmbralSoul)
-                        return BLM.UmbralSoul;
-                }
-
-                if (actionID == BLM.LeyLines || actionID == BLM.BetweenTheLines)
-                {
-                    if (level >= Levels.BetweenTheLines && HasEffect(Buffs.LeyLines))
-                        return BLM.BetweenTheLines;
-                }
-
-                if (actionID == BLM.Scathe)
-                {
-                    var gauge = GetJobGauge<BLMGauge>();
-                    if (gauge.PolyglotStacks > 0 && level >= Levels.Xenoglossy)
-                        return BLM.Xenoglossy;
-                }
-
-                return null;
+                var gauge = GetJobGauge();
+                if (gauge.IsParadoxActive)
+                    return originalHook(BLM.Fire);
+                if (level >= Levels.Fire3 && (!gauge.InAstralFire || HasEffect(Buffs.Firestarter)))
+                    return BLM.Fire3;
             }
+
+            if (actionId == BLM.Blizzard4 || actionId == BLM.Fire4)
+            {
+                var gauge = GetJobGauge();
+                if (gauge.InUmbralIce)
+                    return BLM.Blizzard4;
+                return BLM.Fire4;
+            }
+
+            if (actionId == BLM.Freeze || actionId == BLM.Blizzard2)
+            {
+                var gauge = GetJobGauge();
+                if (gauge.InUmbralIce && level >= Levels.Freeze)
+                    return BLM.Freeze;
+                return originalHook(BLM.Blizzard2);
+            }
+
+            if (actionId == BLM.Transpose || actionId == BLM.UmbralSoul)
+            {
+                var gauge = GetJobGauge();
+                if (gauge.InUmbralIce && level >= Levels.UmbralSoul)
+                    return BLM.UmbralSoul;
+            }
+
+            if (actionId == BLM.LeyLines || actionId == BLM.BetweenTheLines)
+            {
+                if (level >= Levels.BetweenTheLines && HasEffect(Buffs.LeyLines))
+                    return BLM.BetweenTheLines;
+            }
+
+            if (actionId == BLM.Scathe)
+            {
+                var gauge = GetJobGauge();
+                if (gauge.PolyglotStacks > 0 && level >= Levels.Xenoglossy)
+                    return BLM.Xenoglossy;
+            }
+
+            return null;
         }
+
+        public override byte ClassId => 7;
+        public override byte JobId => 25;
     }
 }

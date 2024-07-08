@@ -2,60 +2,47 @@
 using Dalamud.Plugin.Services;
 using Dalamud.Game.ClientState.JobGauge.Types;
 
-namespace XIVComboPlugin.Combos
+namespace XIVComboPlugin.Combos;
+
+static class SGE
 {
-    static class SGE
+    const uint
+       Diagnosis = 24284,
+       Druochole = 24296,
+       Dyskrasia = 24297,
+       Toxikon = 24304;
+
+    static class Levels
     {
-        const uint
-           Diagnosis = 24284,
-           Prognosis = 24286,
-           Druochole = 24296,
-           Ixochole = 24299,
-           Dyskrasia = 24297,
-           Toxikon = 24304;
+        public const byte
+            Druochole = 45,
+            Ixochole = 52,
+            Toxikon = 66;
+    }
 
-        static class Levels
+    public class Combo(IClientState clientState, IJobGauges jobGauges) : ComboHelpers<SGEGauge>(clientState, jobGauges)
+    {
+        public override uint? Invoke(uint actionId, uint lastMove, Func<uint, uint> originalHook)
         {
-            public const byte
-                Druochole = 45,
-                Ixochole = 52,
-                Toxikon = 66;
-        }
+            var level = PlayerLevel();
 
-        public class Combo : CustomCombo
-        {
-            public Combo(IClientState clientState, IJobGauges jobGauges) : base(clientState, jobGauges)
+            if (actionId == SGE.Diagnosis || actionId == SGE.Druochole)
             {
-                this.ClassID = 0;
-                this.JobID = 40;
+                var gauge = GetJobGauge();
+                if (level > Levels.Druochole && gauge.Addersgall > 0 && !gauge.Eukrasia)
+                    return SGE.Druochole;
             }
 
-            public override ulong? Invoke(uint actionID, uint lastMove, float comboTime, Func<uint, ulong> originalHook)
+            if (actionId == SGE.Dyskrasia)
             {
-                var level = this.clientState.LocalPlayer.Level;
-
-                if (actionID == SGE.Diagnosis)
-                {
-                    var gauge = GetJobGauge<SGEGauge>();
-                    if (level > Levels.Druochole && gauge.Addersgall > 0 && !gauge.Eukrasia)
-                        return SGE.Druochole;
-                }
-
-                if (actionID == SGE.Prognosis)
-                {
-                    var gauge = GetJobGauge<SGEGauge>();
-                    if (level > Levels.Ixochole && gauge.Addersgall > 0 && !gauge.Eukrasia)
-                        return SGE.Ixochole;
-                }
-
-                if (actionID == SGE.Dyskrasia)
-                {
-                    if (level >= Levels.Toxikon && GetJobGauge<SGEGauge>().Addersting > 0)
-                        return originalHook(SGE.Toxikon);
-                }
-
-                return null;
+                if (level >= Levels.Toxikon && GetJobGauge().Addersting > 0)
+                    return originalHook(SGE.Toxikon);
             }
+
+            return null;
         }
+
+        public override byte ClassId => 0;
+        public override byte JobId => 40;
     }
 }

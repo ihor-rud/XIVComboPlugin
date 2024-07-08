@@ -2,114 +2,107 @@
 using Dalamud.Plugin.Services;
 using Dalamud.Game.ClientState.JobGauge.Types;
 
-namespace XIVComboPlugin.Combos
+namespace XIVComboPlugin.Combos;
+
+static class DNC
 {
-    static class DNC
+    const uint
+       Bladeshower = 15994,
+       Bloodshower = 15996,
+       Windmill = 15993,
+       RisingWindmill = 15995,
+       Cascade = 15989,
+       Fountain = 15990,
+       ReverseCascade = 15991,
+       Fountainfall = 15992,
+       FanDance1 = 16007,
+       FanDance2 = 16008,
+       FanDance3 = 16009,
+       FanDance4 = 25791,
+       Flourish = 16013,
+       Devilment = 16011,
+       StarfallDance = 25792;
+
+    static class Buffs
     {
-        const uint
-           Bladeshower = 15994,
-           Bloodshower = 15996,
-           Windmill = 15993,
-           RisingWindmill = 15995,
-           Cascade = 15989,
-           Fountain = 15990,
-           ReverseCascade = 15991,
-           Fountainfall = 15992,
-           FanDance1 = 16007,
-           FanDance2 = 16008,
-           FanDance3 = 16009,
-           FanDance4 = 25791,
-           Flourish = 16013,
-           Devilment = 16011,
-           StarfallDance = 25792;
+        public const short
+            FlourishingSymmetry = 3017,
+            FlourishingFlow = 3018,
+            ThreefoldFanDance = 1820,
+            FourfoldFanDance = 2699,
+            FlourishingStarfall = 2700,
+            SilkenSymmetry = 2693,
+            SilkenFlow = 2694;
+    }
 
-        static class Buffs
-        {
-            public const short
-                FlourishingSymmetry = 3017,
-                FlourishingFlow = 3018,
-                ThreefoldFanDance = 1820,
-                FourfoldFanDance = 2699,
-                FlourishingStarfall = 2700,
-                SilkenSymmetry = 2693,
-                SilkenFlow = 2694;
-        }
+    static class Levels
+    {
+        public const byte
+            Fountain = 2,
+            ReverseCascade = 20,
+            Bladeshower = 25,
+            RisingWindmill = 35,
+            Fountainfall = 40,
+            Bloodshower = 45,
+            FanDance4 = 86,
+            StarfallDance = 90;
+    }
 
-        static class Levels
+    public class Combo(IClientState clientState, IJobGauges jobGauges) : ComboHelpers<DNCGauge>(clientState, jobGauges)
+    {
+        public override uint? Invoke(uint actionId, uint lastMove, Func<uint, uint> originalHook)
         {
-            public const byte
-                Fountain = 2,
-                ReverseCascade = 20,
-                Bladeshower = 25,
-                RisingWindmill = 35,
-                Fountainfall = 40,
-                Bloodshower = 45,
-                FanDance4 = 86,
-                StarfallDance = 90;
-        }
+            var level = PlayerLevel();
 
-        public class Combo : CustomCombo
-        {
-            public Combo(IClientState clientState, IJobGauges jobGauges) : base(clientState, jobGauges)
+            if (actionId == DNC.Windmill)
             {
-                this.ClassID = 0;
-                this.JobID = 38;
+                if (level >= Levels.Bloodshower && (HasEffect(Buffs.SilkenFlow) || HasEffect(Buffs.FlourishingFlow)))
+                    return DNC.Bloodshower;
+
+                if (level >= Levels.RisingWindmill && (HasEffect(Buffs.SilkenSymmetry) || HasEffect(Buffs.FlourishingSymmetry)))
+                    return DNC.RisingWindmill;
+
+                if (lastMove == DNC.Windmill && level >= Levels.Bladeshower)
+                    return DNC.Bladeshower;
             }
 
-            public override ulong? Invoke(uint actionID, uint lastMove, float comboTime, Func<uint, ulong> originalHook)
+            if (actionId == DNC.Cascade)
             {
-                var level = this.clientState.LocalPlayer.Level;
+                if (GetJobGauge().IsDancing)
+                    return originalHook(DNC.Cascade);
 
-                if (actionID == DNC.Windmill)
-                {
-                    if (level >= Levels.Bloodshower && (HasEffect(Buffs.SilkenFlow) || HasEffect(Buffs.FlourishingFlow)))
-                        return DNC.Bloodshower;
+                if (level >= Levels.Fountainfall && (HasEffect(Buffs.SilkenFlow) || HasEffect(Buffs.FlourishingFlow)))
+                    return DNC.Fountainfall;
 
-                    if (level >= Levels.RisingWindmill && (HasEffect(Buffs.SilkenSymmetry) || HasEffect(Buffs.FlourishingSymmetry)))
-                        return DNC.RisingWindmill;
+                if (level >= Levels.ReverseCascade && (HasEffect(Buffs.SilkenSymmetry) || HasEffect(Buffs.FlourishingSymmetry)))
+                    return DNC.ReverseCascade;
 
-                    if (comboTime > 0)
-                    {
-                        if (lastMove == DNC.Windmill && level >= Levels.Bladeshower)
-                            return DNC.Bladeshower;
-                    }
-                }
-
-                if (actionID == DNC.Cascade)
-                {
-                    if (GetJobGauge<DNCGauge>().IsDancing)
-                        return originalHook(DNC.Cascade);
-
-                    if (level >= Levels.Fountainfall && (HasEffect(Buffs.SilkenFlow) || HasEffect(Buffs.FlourishingFlow)))
-                        return DNC.Fountainfall;
-
-                    if (level >= Levels.ReverseCascade && (HasEffect(Buffs.SilkenSymmetry) || HasEffect(Buffs.FlourishingSymmetry)))
-                        return DNC.ReverseCascade;
-
-                    if (lastMove == DNC.Cascade && level >= Levels.Fountain)
-                        return DNC.Fountain;
-                }
-
-                if (actionID == DNC.FanDance1 || actionID == DNC.FanDance2)
-                {
-                    if (HasEffect(Buffs.ThreefoldFanDance))
-                        return DNC.FanDance3;
-                }
-
-                if (actionID == DNC.Flourish)
-                {
-                    if (level >= Levels.FanDance4 && HasEffect(Buffs.FourfoldFanDance))
-                        return DNC.FanDance4;
-                }
-
-                if (actionID == DNC.Devilment)
-                {
-                    if (level >= Levels.StarfallDance && HasEffect(Buffs.FlourishingStarfall))
-                        return DNC.StarfallDance;
-                }
-
-                return null;
+                if (lastMove == DNC.Cascade && level >= Levels.Fountain)
+                    return DNC.Fountain;
             }
+
+            if (actionId == DNC.FanDance1 || actionId == DNC.FanDance2)
+            {
+                if (HasEffect(Buffs.ThreefoldFanDance))
+                    return DNC.FanDance3;
+            }
+
+            if (actionId == DNC.Flourish)
+            {
+                if (level >= Levels.FanDance4 && HasEffect(Buffs.FourfoldFanDance))
+                    return DNC.FanDance4;
+            }
+
+            if (actionId == DNC.Devilment)
+            {
+                if (level >= Levels.StarfallDance && HasEffect(Buffs.FlourishingStarfall))
+                    return DNC.StarfallDance;
+            }
+
+            return null;
         }
+
+        public override byte ClassId => 0;
+        public override byte JobId => 38;
     }
 }

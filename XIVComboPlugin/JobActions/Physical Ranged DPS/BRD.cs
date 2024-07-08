@@ -2,49 +2,45 @@
 using Dalamud.Plugin.Services;
 using Dalamud.Game.ClientState.JobGauge.Types;
 
-namespace XIVComboPlugin.Combos
+namespace XIVComboPlugin.Combos;
+
+static class BRD
 {
-    static class BRD
+    const uint
+       QuickNock = 106,
+       HeavyShot = 97,
+       BurstShot = 16495,
+       StraightShot = 98,
+       ApexArrow = 16496;
+
+    static class Buffs
     {
-        const uint
-           QuickNock = 106,
-           HeavyShot = 97,
-           BurstShot = 16495,
-           StraightShot = 98,
-           ApexArrow = 16496;
+        public const short
+            StraightShotReady = 122;
+    }
 
-        static class Buffs
+    public class Combo(IClientState clientState, IJobGauges jobGauges) : ComboHelpers<BRDGauge>(clientState, jobGauges)
+    {
+        public override uint? Invoke(uint actionId, uint lastMove, Func<uint, uint> originalHook)
         {
-            public const short
-                StraightShotReady = 122;
-        }
-
-        public class Combo : CustomCombo
-        {
-            public Combo(IClientState clientState, IJobGauges jobGauges) : base(clientState, jobGauges)
+            if (actionId == BRD.HeavyShot || actionId == BRD.BurstShot)
             {
-                this.ClassID = 5;
-                this.JobID = 23;
+                if (HasEffect(Buffs.StraightShotReady))
+                    return originalHook(BRD.StraightShot);
             }
 
-            public override ulong? Invoke(uint actionID, uint lastMove, float comboTime, Func<uint, ulong> originalHook)
+            if (actionId == BRD.QuickNock)
             {
-                if (actionID == BRD.HeavyShot || actionID == BRD.BurstShot)
-                {
-                    if (HasEffect(Buffs.StraightShotReady))
-                        return originalHook(BRD.StraightShot);
-                }
-
-                if (actionID == BRD.QuickNock)
-                {
-                    var gauge = GetJobGauge<BRDGauge>();
-                    var originalApexArrow = originalHook(BRD.ApexArrow);
-                    if (gauge.SoulVoice == 100 || originalApexArrow != BRD.ApexArrow)
-                        return originalApexArrow;
-                }
-
-                return null;
+                var gauge = GetJobGauge();
+                var originalApexArrow = originalHook(BRD.ApexArrow);
+                if (gauge.SoulVoice == 100 || originalApexArrow != BRD.ApexArrow)
+                    return originalApexArrow;
             }
+
+            return null;
         }
+
+        public override byte ClassId => 5;
+        public override byte JobId => 23;
     }
 }

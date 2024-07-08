@@ -1,79 +1,70 @@
 ﻿using System;
+using Dalamud.Game.ClientState.JobGauge.Types;
 using Dalamud.Plugin.Services;
 
-namespace XIVComboPlugin.Combos
+namespace XIVComboPlugin.Combos;
+
+static class GNB
 {
-    static class GNB
+    const uint
+       KeenEdge = 16137,
+       BrutalShell = 16139,
+       SolidBarrel = 16145,
+       DemonSlice = 16141,
+       DemonSlaughter = 16149,
+       GnashingFang = 16146,
+       Continuation = 16155;
+
+    static class Buffs
     {
-        const uint
-           KeenEdge = 16137,
-           BrutalShell = 16139,
-           SolidBarrel = 16145,
-           DemonSlice = 16141,
-           DemonSlaughter = 16149,
-           GnashingFang = 16146,
-           Continuation = 16155;
+        public const short
+            ReadyToRip = 1842,
+            ReadyToTear = 1843,
+            ReadyToGouge = 1844;
+    }
 
-        static class Buffs
-        {
-            public const short
-                ReadyToRip = 1842,
-                ReadyToTear = 1843,
-                ReadyToGouge = 1844;
-        }
+    static class Levels
+    {
+        public const byte
+            BrutalShell = 4,
+            SolidBarrel = 26,
+            DemonSlaughter = 40;
+    }
 
-        static class Levels
+    public class Combo(IClientState clientState, IJobGauges jobGauges) : ComboHelpers<GNBGauge>(clientState, jobGauges)
+    {
+        public override uint? Invoke(uint actionId, uint lastMove, Func<uint, uint> originalHook)
         {
-            public const byte
-                BrutalShell = 4,
-                SolidBarrel = 26,
-                DemonSlaughter = 40;
-        }
+            var level = PlayerLevel();
 
-        public class Combo : CustomCombo
-        {
-            public Combo(IClientState clientState, IJobGauges jobGauges) : base(clientState, jobGauges)
+            if (actionId == GNB.SolidBarrel)
             {
-                this.ClassID = 0;
-                this.JobID = 37;
+                if (lastMove == GNB.KeenEdge && level >= Levels.BrutalShell)
+                    return GNB.BrutalShell;
+                if (lastMove == GNB.BrutalShell && level >= Levels.SolidBarrel)
+                    return GNB.SolidBarrel;
+
+                return GNB.KeenEdge;
             }
 
-            public override ulong? Invoke(uint actionID, uint lastMove, float comboTime, Func<uint, ulong> originalHook)
+            if (actionId == GNB.GnashingFang)
             {
-                var level = this.clientState.LocalPlayer.Level;
-
-                if (actionID == GNB.SolidBarrel)
-                {
-                    if (comboTime > 0)
-                    {
-                        if (lastMove == GNB.KeenEdge && level >= Levels.BrutalShell)
-                            return GNB.BrutalShell;
-                        if (lastMove == GNB.BrutalShell && level >= Levels.SolidBarrel)
-                            return GNB.SolidBarrel;
-                    }
-
-                    return GNB.KeenEdge;
-                }
-
-                if (actionID == GNB.GnashingFang)
-                {
-                    if (HasEffect(Buffs.ReadyToRip) || HasEffect(Buffs.ReadyToTear) || HasEffect(Buffs.ReadyToGouge))
-                        return originalHook(GNB.Continuation);
-                }
-
-                if (actionID == GNB.DemonSlaughter)
-                {
-                    if (comboTime > 0)
-                    {
-                        if (lastMove == GNB.DemonSlice && level >= Levels.DemonSlaughter)
-                            return GNB.DemonSlaughter;
-                    }
-
-                    return GNB.DemonSlice;
-                }
-
-                return null;
+                if (HasEffect(Buffs.ReadyToRip) || HasEffect(Buffs.ReadyToTear) || HasEffect(Buffs.ReadyToGouge))
+                    return originalHook(GNB.Continuation);
             }
+
+            if (actionId == GNB.DemonSlaughter)
+            {
+                if (lastMove == GNB.DemonSlice && level >= Levels.DemonSlaughter)
+                    return GNB.DemonSlaughter;
+
+                return GNB.DemonSlice;
+            }
+
+            return null;
         }
+
+        public override byte ClassId => 0;
+        public override byte JobId => 37;
     }
 }
