@@ -17,13 +17,18 @@ static class PCT
         SteelMuse = 35348,
         HammerStamp = 34678,
         LandscapeMotif = 34691,
-        ScenicMuse = 35349;
+        ScenicMuse = 35349,
+        RainbowDrip = 34688,
+        HolyInWhite = 34662,
+        CometInBlack = 34663;
 
     static class Buffs
     {
         public const short
             SubstractivePalette = 3674,
-            HammerTime = 3680;
+            HammerTime = 3680,
+            RainbowBright = 3679,
+            MonochromeTones = 3691;
     }
 
     static class Levels
@@ -39,6 +44,9 @@ static class PCT
 
             if (actionId == PCT.BlizzardCyan || actionId == PCT.FireRed)
             {
+                if (HasEffect(Buffs.RainbowBright))
+                    return PCT.RainbowDrip;
+
                 if (HasEffect(Buffs.SubstractivePalette))
                     return originalHook(PCT.BlizzardCyan);
 
@@ -47,13 +55,16 @@ static class PCT
 
             if (actionId == PCT.Blizzard2Cyan || actionId == PCT.Fire2Red)
             {
+                if (HasEffect(Buffs.RainbowBright))
+                    return PCT.RainbowDrip;
+
                 if (HasEffect(Buffs.SubstractivePalette))
                     return originalHook(PCT.Blizzard2Cyan);
 
                 return originalHook(PCT.Fire2Red);
             }
 
-            if (actionId == PCT.CreatureMotif || actionId == PCT.LivingMuse)
+            if (actionId == PCT.CreatureMotif)
             {
                 if (GetJobGauge().CreatureMotifDrawn)
                     return originalHook(PCT.LivingMuse);
@@ -61,7 +72,7 @@ static class PCT
                 return originalHook(PCT.CreatureMotif);
             }
 
-            if (actionId == PCT.WeaponMotif || actionId == PCT.SteelMuse)
+            if (actionId == PCT.WeaponMotif)
             {
                 if (HasEffect(Buffs.HammerTime))
                     return originalHook(PCT.HammerStamp);
@@ -72,12 +83,20 @@ static class PCT
                 return originalHook(PCT.WeaponMotif);
             }
 
-            if (actionId == PCT.LandscapeMotif || actionId == PCT.ScenicMuse)
+            if (actionId == PCT.LandscapeMotif)
             {
                 if (GetJobGauge().LandscapeMotifDrawn)
                     return originalHook(PCT.ScenicMuse);
 
                 return originalHook(PCT.LandscapeMotif);
+            }
+
+            if (actionId == PCT.HolyInWhite || actionId == PCT.CometInBlack)
+            {
+                if (HasEffect(Buffs.MonochromeTones))
+                    return PCT.CometInBlack;
+
+                return PCT.HolyInWhite;
             }
 
             return null;

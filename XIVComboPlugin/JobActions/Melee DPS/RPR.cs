@@ -14,7 +14,9 @@ static class RPR
        Gallows = 24383,
        SpinningScythe = 24376,
        NightmareScythe = 24377,
-       Guillotine = 24384;
+       Guillotine = 24384,
+       Gluttony = 24393,
+       Communio = 27807;
 
     static class Buffs
     {
@@ -84,6 +86,14 @@ static class RPR
                     return RPR.NightmareScythe;
 
                 return RPR.SpinningScythe;
+            }
+
+            if (actionId == RPR.Gluttony)
+            {
+                if (HasEffect(Buffs.Enshrouded))
+                {
+                    return RPR.Communio;
+                }
             }
 
             return null;
